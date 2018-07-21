@@ -5,6 +5,7 @@
 #endif
 #include "Thumbnail.h"
 #include "Font.h"
+#include "Replacements.h"
 #include "SDL/SDL_gfxPrimitives.h"
 
 Uint16 get_pixel16(SDL_Surface *surface, int x, int y)
@@ -86,6 +87,32 @@ void FreeThumbnail(struct Thumbnail** ppThumbnail)
    *ppThumbnail = NULL;
 }
 
+void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth, char* pstrBuffer, int r, int g, int b)
+{
+   char buffer[50];
+   int nLen = strlen(pstrBuffer);
+
+   if (nLen < 15)
+   {
+      DrawText(pSurface, pFont, x, y, pstrBuffer, r, g, b);
+   }
+
+   int j = 0;
+   int nCharsInRow = 0;
+   for (int i = 0; i < nLen; i++)
+   {
+      buffer[j++] = pstrBuffer[i];
+      nCharsInRow++;
+      if (nCharsInRow > 9 && pstrBuffer[i] == ' ')
+      {
+         buffer[j++] = '\n';
+         nCharsInRow = 0;
+      }
+   }
+   buffer[j] = '\0';
+   DrawText(pSurface, pFont, x, y, buffer, r, g, b);
+}
+
 void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selected, int x, int y, int maxWidth, int maxHeight)
 {
    if (pThumbnail->m_pThumbSurface == NULL)
@@ -129,6 +156,7 @@ void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selec
 
    if (selected == 1)
    {
-      DrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, GetCountryName(pThumbnail->m_pFlagInformation, pThumbnail->m_eFlag), 0, 0, 0);
+      const char* pstrCountryName = GetCountryName(pThumbnail->m_pFlagInformation, pThumbnail->m_eFlag);
+      SmartDrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, maxWidth, pstrCountryName, 0, 0, 0);
    }
 }

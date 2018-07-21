@@ -3,6 +3,17 @@
 
 enum Flags
 {
+   Afghanistan,
+   Albania,
+   Algeria,
+   Andorra,
+   Angola,
+   AntiguaAndBarbuda,
+   Argentina,
+   Armenia,
+   Australia,
+   Austria,
+   Azerbaijan,
    Brazil,
    UnitedStates,
    Turkey,

@@ -44,7 +44,7 @@ void DrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, char* pstrBuffer
    SDL_Color textColor = { r, g, b };
    message = TTF_RenderText_Solid(pFont, pstrBuffer, textColor);
    SDL_Rect rectSrc, rectDst;
-   rectSrc.w = SCREEN_WIDTH- x;
+   rectSrc.w = strlen(pstrBuffer) * 12;
    rectSrc.h = 24;
    rectSrc.x = 0;
    rectSrc.y = 0;

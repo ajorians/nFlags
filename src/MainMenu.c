@@ -9,11 +9,13 @@
 
 #define MENU_SELECTOR_LINE_WIDTH (2)
 
-#define MENU_FLAG_MAX_WIDTH   (80)
-#define MENU_FLAG_MAX_HEIGHT  (60)
+#define MENU_FLAG_MAX_WIDTH   (72)
+#define MENU_FLAG_MAX_HEIGHT  (50)
 
-#define MENU_FLAG_SPACING_HORIZ  (20)
-#define MENU_FLAG_SPACING_VERT   (20)
+#define MENU_FLAG_SPACING_HORIZ  (15)
+#define MENU_FLAG_SPACING_VERT   (22)
+
+#define MENU_TITLE_TOP        (2)
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen)
 {
@@ -32,14 +34,18 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
 
    int nNumFlags = GetNumberOfFlags(pMenu->m_pFlagInformation);
 
-   const int nNumFlagRows       = SCREEN_HEIGHT / (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
+   const int nNumFlagRows       = (SCREEN_HEIGHT - MENU_TITLE_TOP - 15/*Height*/) / (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
    const int nNumFlagColumns    = SCREEN_WIDTH / (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
 
-   const int nNumRowsNeeded     = max(1, (nNumFlags + nNumFlagColumns) / nNumFlagColumns);
+   const int nNumRowsNeeded     = min(max(1, (nNumFlags + nNumFlagRows) / nNumFlagRows), nNumFlagRows);
    const int nNumColsNeeded     = max(1, (nNumFlags + nNumRowsNeeded )/ nNumRowsNeeded );
 
    const int nFlagSurfaceHeight = nNumRowsNeeded * (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
    const int nFlagSurfaceWidth  = nNumColsNeeded * (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
+
+   pMenu->m_nItemsPerRow = nNumColsNeeded;
+   pMenu->m_nSrcScrollX = 0;
+   pMenu->m_nScrollX = 0;
 
    pMenu->m_pFlagsSurface = SDL_CreateRGBSurface(0, nFlagSurfaceWidth, nFlagSurfaceHeight, SCREEN_BIT_DEPTH, 0, 0, 0, 0);
 
@@ -54,7 +60,7 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
       CreateThumbnail(&(pMenu->m_ppThumbnails)[i], pMenu->m_pFlagInformation, pMenu->m_pImageLoader, (enum Flags)i);
    }
 
-   pMenu->m_eNextFlagImageToLoad = Brazil;
+   pMenu->m_eNextFlagImageToLoad = Afghanistan;
 
 #ifdef _TINSPIRE
    pMenu->m_pTitle = nSDL_LoadImage(image_TwoDigits);
@@ -127,12 +133,18 @@ int PollEvents(struct MainMenu* pMenu)
 
          case SDLK_8:
          case SDLK_UP:
-            
+            if (pMenu->m_eSelectedFlag >= (enum Flags)(0+pMenu->m_nItemsPerRow) )
+            {
+               pMenu->m_eSelectedFlag-= pMenu->m_nItemsPerRow;
+            }
             break;
 
          case SDLK_2:
          case SDLK_DOWN:
-            
+            if (pMenu->m_eSelectedFlag <= (enum Flags)(FLAGS_MAX - 1 - pMenu->m_nItemsPerRow))
+            {
+               pMenu->m_eSelectedFlag += pMenu->m_nItemsPerRow;
+            }
             break;
 
          case SDLK_5:
@@ -153,7 +165,7 @@ int PollEvents(struct MainMenu* pMenu)
    return 1;
 }
 
-void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
+void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface, int* pnCurrentX)
 {
    SDL_FillRect(pFlagsSurface, NULL, SDL_MapRGB(pFlagsSurface->format, 255, 215, 139));
 
@@ -167,6 +179,11 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
          int selected = (pMenu->m_eSelectedFlag == (enum Flags)i) ? 1 : 0;
 
          DrawThumbnail((pMenu->m_ppThumbnails)[i], pFlagsSurface, selected, nX, nY, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
+
+         if (selected == 1)
+         {
+            *pnCurrentX = nX;
+         }
       }
       nX += MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
       if (nX >= pFlagsSurface->w)
@@ -188,17 +205,21 @@ void UpdateDisplay(struct MainMenu* pMenu)
    SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, 255, 215, 139));
 #endif
 
-   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, 15, "nFlags", 0, 0, 0);
+   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "nFlags", 0, 0, 0);
 
-   DrawFlagsSurface(pMenu, pMenu->m_pFlagsSurface/*, &nCurrentLevelY*/);
+   int nCurrentX = -1;
+   DrawFlagsSurface(pMenu, pMenu->m_pFlagsSurface, &nCurrentX);
 
-   /*if (pMenu->m_nScrollY == -1) {
-      int n = nCurrentLevelY - g_LevelPieceHeight;
+   int nFlagPieceWidth = MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
+
+   //Initial scroll X if too jarring to scroll on opening
+   /*if (pMenu->m_nScrollX == -1) {
+      int n = nCurrentLevelX - nFlagPieceWidth;
       if (n < 0)
          n = 0;
-      if (n >= (pMenu->m_pLevelSurface->h - g_LevelPieceHeight))
-         n = pMenu->m_pLevelSurface->h - g_LevelPieceHeight;
-      pMenu->m_nScrollY = pMenu->m_nSrcScrollY = n;
+      if (n >= (pMenu->m_pFlagsSurface->w - nFlagPieceWidth))
+         n = pMenu->m_pFlagsSurface->w - nFlagPieceWidth;
+      pMenu->m_nScrollX = pMenu->m_nSrcScrollX = n;
    }*/
 
    const int nDestinationLeft = 10;
@@ -207,15 +228,57 @@ void UpdateDisplay(struct MainMenu* pMenu)
    SDL_Rect src;
    src.w = nDestinationWidth;
    src.h = pMenu->m_pFlagsSurface->h;
-   src.x = 0;
+   src.x = pMenu->m_nSrcScrollX;
    src.y = 0;
+
+   int nDstY = (SCREEN_HEIGHT - MENU_TITLE_TOP - 15/*height*/ - src.h - 3/*Little padding*/) / 2 + MENU_TITLE_TOP + 15/*height*/;
 
    SDL_Rect dst;
    dst.w = nDestinationWidth;
    dst.h = src.h;
    dst.x = nDestinationLeft;
-   dst.y = SCREEN_HEIGHT / 2 - src.h / 2;
+   dst.y = nDstY;
    SDL_BlitSurface(pMenu->m_pFlagsSurface, &src, pMenu->m_pScreen, &dst);
+
+   if (pMenu->m_nSrcScrollX < pMenu->m_nScrollX)
+   {
+      int nAmount = 3;
+      if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (4 * nFlagPieceWidth))
+         nAmount = 18;
+      else if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (3 * nFlagPieceWidth))
+         nAmount = 8;
+      else if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (2 * nFlagPieceWidth))
+         nAmount = 6;
+      pMenu->m_nSrcScrollX += nAmount;
+   }
+   if (pMenu->m_nSrcScrollX > pMenu->m_nScrollX)
+   {
+      int nAmount = 3;
+      if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (4 * nFlagPieceWidth))
+         nAmount = 18;
+      else if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (3 * nFlagPieceWidth))
+         nAmount = 8;
+      else if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (2 * nFlagPieceWidth))
+         nAmount = 6;
+      pMenu->m_nSrcScrollX -= nAmount;
+   }
+
+   //Check if needs to scroll
+   int nCurrentFlagLeftScreen = pMenu->m_nScrollX > nCurrentX ? 1 : 0;
+   int nCurrentFlagRightScreen = (pMenu->m_nScrollX + nDestinationWidth - (nFlagPieceWidth + 15/*Little extra*/) - nCurrentX) < 0 ? 1 : 0;
+   if (nCurrentFlagLeftScreen == 1 || nCurrentFlagRightScreen == 1)
+   {
+      if (nCurrentFlagLeftScreen == 1) {
+         pMenu->m_nScrollX -= (nFlagPieceWidth*1.5);
+         if (pMenu->m_nScrollX < 0)
+            pMenu->m_nScrollX = 0;
+      }
+      else if (nCurrentFlagRightScreen == 1) {
+         pMenu->m_nScrollX += (nFlagPieceWidth*1.5);
+         if (pMenu->m_nScrollX > (pMenu->m_pFlagsSurface->w - nDestinationWidth))
+            pMenu->m_nScrollX = pMenu->m_pFlagsSurface->w - nDestinationWidth;
+      }
+   }
 
    SDL_UpdateRect(pMenu->m_pScreen, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }

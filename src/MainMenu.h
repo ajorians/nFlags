@@ -22,6 +22,9 @@ struct MainMenu
 {
    enum MenuChoice m_eChoice;
    enum Flags m_eSelectedFlag;
+   int m_nItemsPerRow;
+   int m_nSrcScrollX;
+   int m_nScrollX;
    Font *m_pFont;
    struct Config* m_pConfig;//Does not own
    struct SDL_Surface* m_pScreen;//Does not own
