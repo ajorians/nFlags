@@ -38,7 +38,7 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
 
    for (int i = 0; i < nNumFlags; i++)
    {
-      CreateThumbnail(&(pMenu->m_ppThumbnails)[i], pMenu->m_pImageLoader, (enum Flags)i);
+      CreateThumbnail(&(pMenu->m_ppThumbnails)[i], pMenu->m_pFlagInformation, pMenu->m_pImageLoader, (enum Flags)i);
    }
 
    pMenu->m_eNextFlagImageToLoad = Brazil;
@@ -138,8 +138,6 @@ int PollEvents(struct MainMenu* pMenu)
    return 1;
 }
 
-
-
 void UpdateDisplay(struct MainMenu* pMenu)
 {
 #ifdef _TINSPIRE
@@ -158,7 +156,8 @@ void UpdateDisplay(struct MainMenu* pMenu)
    {
       if ((pMenu->m_ppThumbnails)[i] != NULL)
       {
-         DrawThumbnail((pMenu->m_ppThumbnails)[i], pMenu->m_pScreen, MENU_FLAG_SPACING_X * i, 50, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
+         int selected = (pMenu->m_eSelectedFlag == (enum Flags)i) ? 1 : 0;
+         DrawThumbnail((pMenu->m_ppThumbnails)[i], pMenu->m_pScreen, selected, MENU_FLAG_SPACING_X * i, 50, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
       }
    }
 
@@ -182,6 +181,11 @@ int MainMenuLoop(struct MainMenu* pMenu)
 int MainMenuShouldQuit(struct MainMenu* pMenu)
 {
    return pMenu->m_eChoice == Quit;
+}
+
+enum Flags MainMenuGetSelectedFlag(struct MainMenu* pMenu)
+{
+   return pMenu->m_eSelectedFlag;
 }
 
 

@@ -79,13 +79,19 @@ int main(int argc, char *argv[])
       while(MainMenuLoop(pMenu)){}
       if (MainMenuShouldQuit(pMenu) == 1)
       {
+         FreeMainMenu(&pMenu);
          break;
       }
+      enum Flags eSelectedFlag = MainMenuGetSelectedFlag(pMenu);
+      FreeMainMenu(&pMenu);
+      pMenu = NULL;
 
       //Show Details
       struct ShowFlagDetails* pFlagDetails = NULL;
-      CreateShowFlagDetails(&pFlagDetails, pScreen);
+      CreateShowFlagDetails(&pFlagDetails, pScreen, eSelectedFlag);
       while (ShowFlagDetailsLoop(pFlagDetails)) {}
+      FreeShowFlagDetails(&pFlagDetails);
+      pFlagDetails = NULL;
    }
 
    FreeConfig(&pConfig);

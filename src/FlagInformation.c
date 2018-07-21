@@ -52,15 +52,15 @@ const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags 
    {
    default:
    case Brazil:
-      return "Images\\ad.bmp";
+      return "Images\\br.bmp";
    case UnitedStates:
-      return "Images\\ae.bmp";
+      return "Images\\us.bmp";
    case Turkey:
-      return "Images\\af.bmp";
+      return "Images\\tr.bmp";
    case Israel:
-      return "Images\\ag.bmp";
+      return "Images\\il.bmp";
    case Germany:
-      return "Images\\ag.bmp";
+      return "Images\\gn.bmp";
    }
 }
 #endif

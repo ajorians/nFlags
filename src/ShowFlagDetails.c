@@ -7,16 +7,16 @@
 #include "Replacements.h"
 #include "SDL/SDL_gfxPrimitives.h"
 
-void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SDL_Surface* pScreen)
+void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SDL_Surface* pScreen, enum Flags eFlag)
 {
    *ppShowFlagDetails = malloc(sizeof(struct ShowFlagDetails));
    struct ShowFlagDetails* pDetails = (*ppShowFlagDetails);
 
    pDetails->m_pScreen = pScreen;
 
-   pDetails->m_eFlag = UnitedStates;
+   pDetails->m_eFlag = eFlag;
 
-   pDetails->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 24);
+   pDetails->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 16);
 
    CreateFlagInformation(&pDetails->m_pFlagInformation);
 
@@ -29,6 +29,7 @@ void FreeShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails)
    struct ShowFlagDetails* pDetails = *ppShowFlagDetails;
 
    FreeFont(pDetails->m_pFont);
+   pDetails->m_pFont = NULL;
    FreeImageLoader(&pDetails->m_pImageLoader);
    FreeFlagInformation(&pDetails->m_pFlagInformation);
 

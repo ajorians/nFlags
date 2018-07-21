@@ -45,11 +45,12 @@ SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height)
 static Font *g_pFontThumbnail = NULL;
 static int g_nThumbnailCount = 0;
 
-void CreateThumbnail(struct Thumbnail** ppThumbnail, struct ImageLoader* pImageLoader, enum Flags eFlag)
+void CreateThumbnail(struct Thumbnail** ppThumbnail, struct FlagInformation* pFlagInformation, struct ImageLoader* pImageLoader, enum Flags eFlag)
 {
    *ppThumbnail = malloc(sizeof(struct Thumbnail));
    struct Thumbnail* pThumbnail = (*ppThumbnail);
 
+   pThumbnail->m_pFlagInformation = pFlagInformation;
    pThumbnail->m_pImageLoader = pImageLoader;
    pThumbnail->m_eFlag = eFlag;
    pThumbnail->m_pThumbSurface = NULL;
@@ -57,8 +58,8 @@ void CreateThumbnail(struct Thumbnail** ppThumbnail, struct ImageLoader* pImageL
    if (g_nThumbnailCount == 0)
    {
       g_pFontThumbnail = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 10);
-      g_nThumbnailCount++;
    }
+   g_nThumbnailCount++;
 }
 
 void FreeThumbnail(struct Thumbnail** ppThumbnail)
@@ -71,6 +72,7 @@ void FreeThumbnail(struct Thumbnail** ppThumbnail)
       pThumbnail->m_pThumbSurface = NULL;
    }
 
+   pThumbnail->m_pFlagInformation = NULL;//Does not own
    pThumbnail->m_pImageLoader = NULL;//Does not own
 
    g_nThumbnailCount--;
@@ -84,7 +86,7 @@ void FreeThumbnail(struct Thumbnail** ppThumbnail)
    *ppThumbnail = NULL;
 }
 
-void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int x, int y, int maxWidth, int maxHeight)
+void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selected, int x, int y, int maxWidth, int maxHeight)
 {
    if (pThumbnail->m_pThumbSurface == NULL)
    {
@@ -109,5 +111,8 @@ void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int x, in
       SDL_BlitSurface(pThumbnail->m_pThumbSurface, NULL, pScreen, &dst);
    }
 
-   DrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, "Brazil", 0, 0, 0);
+   if (selected == 1)
+   {
+      DrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, GetCountryName(pThumbnail->m_pFlagInformation, pThumbnail->m_eFlag), 0, 0, 0);
+   }
 }

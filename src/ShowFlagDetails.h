@@ -19,7 +19,7 @@ struct ShowFlagDetails
    struct ImageLoader* m_pImageLoader;
 };
 
-void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SDL_Surface* pScreen);
+void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SDL_Surface* pScreen, enum Flags eFlag);
 void FreeShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails);
 int ShowFlagDetailsLoop(struct ShowFlagDetails* pShowFlagDetails);
 
