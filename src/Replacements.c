@@ -8,6 +8,16 @@
 #endif
 #include <stdarg.h>
 
+int min(int a, int b)
+{
+   return a < b ? a : b;
+}
+
+int max(int a, int b)
+{
+   return a > b ? a : b;
+}
+
 void IntToA(char* pstrBuffer, int bufferSize, int n)
 {
 #ifdef _TINSPIRE

@@ -48,7 +48,7 @@ void LoadFlagImage(struct ImageLoader* pImageLoader, struct FlagInformation* pFl
    }
    (pImageLoader->m_ppSurfaces)[nIndex] = 
 #ifndef _TINSPIRE
-      SDL_LoadBMP( GetPathForFlag(pFlagInformation, flag) );
+      SDL_LoadBMP( GetPathForFlag(pFlagInformation, flag) );//"/home/ajorians/Documents/Git/nFlags/src/Images/ad.bmp" );
 #endif
 }
 
