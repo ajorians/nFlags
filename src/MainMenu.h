@@ -14,15 +14,14 @@
 
 enum MenuChoice
 {
-   Play,
-   Options,
-   Help,
+   ShowDetails,
    Quit
 };
 
 struct MainMenu
 {
    enum MenuChoice m_eChoice;
+   enum Flags m_eSelectedFlag;
    Font *m_pFont;
    struct Config* m_pConfig;//Does not own
    struct SDL_Surface* m_pScreen;//Does not own
@@ -37,7 +36,5 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
 void FreeMainMenu(struct MainMenu** ppMenu);
 int MainMenuLoop(struct MainMenu* pMenu);
 int MainMenuShouldQuit(struct MainMenu* pMenu);
-int MainMenuShowOptions(struct MainMenu* pMenu);
-int MainMenuShowHelp(struct MainMenu* pMenu);
 
 #endif

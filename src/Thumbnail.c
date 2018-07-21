@@ -4,6 +4,7 @@
 #else
 #endif
 #include "Thumbnail.h"
+#include "Font.h"
 #include "SDL/SDL_gfxPrimitives.h"
 
 Uint16 get_pixel16(SDL_Surface *surface, int x, int y)
@@ -41,6 +42,9 @@ SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height)
    return _ret;
 }
 
+static Font *g_pFontThumbnail = NULL;
+static int g_nThumbnailCount = 0;
+
 void CreateThumbnail(struct Thumbnail** ppThumbnail, struct ImageLoader* pImageLoader, enum Flags eFlag)
 {
    *ppThumbnail = malloc(sizeof(struct Thumbnail));
@@ -49,6 +53,12 @@ void CreateThumbnail(struct Thumbnail** ppThumbnail, struct ImageLoader* pImageL
    pThumbnail->m_pImageLoader = pImageLoader;
    pThumbnail->m_eFlag = eFlag;
    pThumbnail->m_pThumbSurface = NULL;
+
+   if (g_nThumbnailCount == 0)
+   {
+      g_pFontThumbnail = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 10);
+      g_nThumbnailCount++;
+   }
 }
 
 void FreeThumbnail(struct Thumbnail** ppThumbnail)
@@ -62,6 +72,13 @@ void FreeThumbnail(struct Thumbnail** ppThumbnail)
    }
 
    pThumbnail->m_pImageLoader = NULL;//Does not own
+
+   g_nThumbnailCount--;
+   if (g_nThumbnailCount == 0)
+   {
+      FreeFont(g_pFontThumbnail);
+      g_pFontThumbnail = NULL;
+   }
 
    free(*ppThumbnail);
    *ppThumbnail = NULL;
@@ -91,4 +108,6 @@ void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int x, in
 
       SDL_BlitSurface(pThumbnail->m_pThumbSurface, NULL, pScreen, &dst);
    }
+
+   DrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, "Brazil", 0, 0, 0);
 }

@@ -76,7 +76,12 @@ int main(int argc, char *argv[])
       struct MainMenu* pMenu = NULL;
       CreateMainMenu(&pMenu, pConfig, pScreen);
       while(MainMenuLoop(pMenu)){}
-      break;
+      if (MainMenuShouldQuit(pMenu) == 1)
+      {
+         break;
+      }
+
+      //Show Details
    }
 
    FreeConfig(&pConfig);

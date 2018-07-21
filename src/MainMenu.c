@@ -9,6 +9,10 @@
 
 #define MENU_SELECTOR_LINE_WIDTH (2)
 
+#define MENU_FLAG_SPACING_X   (50)
+#define MENU_FLAG_MAX_WIDTH   (40)
+#define MENU_FLAG_MAX_HEIGHT  (30)
+
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen)
 {
    *ppMenu = malloc(sizeof(struct MainMenu));
@@ -17,7 +21,8 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
    pMenu->m_pConfig = pConfig;
    pMenu->m_pScreen = pScreen;
 
-   pMenu->m_eChoice = Play;
+   pMenu->m_eChoice = ShowDetails;
+   pMenu->m_eSelectedFlag = UnitedStates;
 
    pMenu->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 24);
 
@@ -91,43 +96,35 @@ int PollEvents(struct MainMenu* pMenu)
 
          case SDLK_4:
          case SDLK_LEFT:
-            if (pMenu->m_eChoice == Play) {
-            }
-
-            else if (pMenu->m_eChoice == Help) {
-               pMenu->m_eChoice = Options;
+            if (pMenu->m_eSelectedFlag > (enum Flags)0)
+            {
+               pMenu->m_eSelectedFlag--;
             }
             break;
 
          case SDLK_6:
          case SDLK_RIGHT:
-            if (pMenu->m_eChoice == Play) {
-            }
-
-            else if (pMenu->m_eChoice == Options) {
-               pMenu->m_eChoice = Help;
+            if (pMenu->m_eSelectedFlag < (enum Flags)(FLAGS_MAX-1) )
+            {
+               pMenu->m_eSelectedFlag++;
             }
             break;
 
          case SDLK_8:
          case SDLK_UP:
-            if (pMenu->m_eChoice == Options || pMenu->m_eChoice == Help) {
-               pMenu->m_eChoice = Play;
-            }
+            
             break;
 
          case SDLK_2:
          case SDLK_DOWN:
-            if (pMenu->m_eChoice == Play) {
-               pMenu->m_eChoice = Options;
-            }
+            
             break;
 
          case SDLK_5:
          case SDLK_SPACE:
          case SDLK_RETURN:
          case SDLK_LCTRL:
-            if (pMenu->m_eChoice == Play || pMenu->m_eChoice == Options || pMenu->m_eChoice == Help) {
+            if (pMenu->m_eChoice == ShowDetails) {
                return 0;
             }
             break;
@@ -161,7 +158,7 @@ void UpdateDisplay(struct MainMenu* pMenu)
    {
       if ((pMenu->m_ppThumbnails)[i] != NULL)
       {
-         DrawThumbnail((pMenu->m_ppThumbnails)[i], pMenu->m_pScreen, 50 * i, 50, 40, 30);
+         DrawThumbnail((pMenu->m_ppThumbnails)[i], pMenu->m_pScreen, MENU_FLAG_SPACING_X * i, 50, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
       }
    }
 
@@ -187,13 +184,4 @@ int MainMenuShouldQuit(struct MainMenu* pMenu)
    return pMenu->m_eChoice == Quit;
 }
 
-int MainMenuShowOptions(struct MainMenu* pMenu)
-{
-   return pMenu->m_eChoice == Options;
-}
-
-int MainMenuShowHelp(struct MainMenu* pMenu)
-{
-   return pMenu->m_eChoice == Help;
-}
 
