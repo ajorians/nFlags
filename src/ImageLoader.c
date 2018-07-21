@@ -37,6 +37,15 @@ void FreeImageLoader(struct ImageLoader** ppImageLoader)
 void LoadFlagImage(struct ImageLoader* pImageLoader, struct FlagInformation* pFlagInformation, enum Flags flag)
 {
    int nIndex = (int)flag;
+   if (pImageLoader->m_nNumImages == 1)
+   {
+      nIndex = 0;
+   }
+   if( (pImageLoader->m_ppSurfaces)[nIndex] != NULL )
+   {
+      SDL_FreeSurface( (pImageLoader->m_ppSurfaces)[nIndex] );
+      (pImageLoader->m_ppSurfaces)[nIndex] = NULL;
+   }
    (pImageLoader->m_ppSurfaces)[nIndex] = 
 #ifndef _TINSPIRE
       SDL_LoadBMP( GetPathForFlag(pFlagInformation, flag) );
@@ -46,6 +55,10 @@ void LoadFlagImage(struct ImageLoader* pImageLoader, struct FlagInformation* pFl
 SDL_Surface* GetLoadedImage(struct ImageLoader* pImageLoader, enum Flags flag)
 {
    int nIndex = (int)flag;
+   if (pImageLoader->m_nNumImages == 1)
+   {
+      nIndex = 0;
+   }
    return (pImageLoader->m_ppSurfaces)[nIndex];
 }
 

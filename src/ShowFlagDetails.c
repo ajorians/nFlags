@@ -57,18 +57,20 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
 
          case SDLK_4:
          case SDLK_LEFT:
-            /*if (pMenu->m_eSelectedFlag > (enum Flags)0)
+            if (pDetails->m_eFlag > (enum Flags)0)
             {
-               pMenu->m_eSelectedFlag--;
-            }*/
+               pDetails->m_eFlag--;
+               LoadFlagImage(pDetails->m_pImageLoader, pDetails->m_pFlagInformation, pDetails->m_eFlag);
+            }
             break;
 
          case SDLK_6:
          case SDLK_RIGHT:
-            /*if (pMenu->m_eSelectedFlag < (enum Flags)(FLAGS_MAX-1) )
+            if (pDetails->m_eFlag < (enum Flags)(FLAGS_MAX - 1))
             {
-               pMenu->m_eSelectedFlag++;
-            }*/
+               pDetails->m_eFlag++;
+               LoadFlagImage(pDetails->m_pImageLoader, pDetails->m_pFlagInformation, pDetails->m_eFlag);
+            }
             break;
 
          case SDLK_8:
@@ -110,30 +112,52 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
    SDL_FillRect(pShowFlagDetails->m_pScreen, NULL, SDL_MapRGB(pShowFlagDetails->m_pScreen->format, 255, 215, 139));
 #endif
 
-   SDL_Rect dst;
-   dst.x = 10;
-   dst.y = 10;
-   dst.w = SCREEN_WIDTH/2;
-   dst.h = SCREEN_HEIGHT/2;
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 15, GetCountryName(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
+
    SDL_Surface* pFlagSurface = GetLoadedImage(pShowFlagDetails->m_pImageLoader, pShowFlagDetails->m_eFlag);
 
-   SDL_Surface* pSmallerFlagSurface = ScaleSurface(pFlagSurface, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+   int nImgWidth = pFlagSurface->w;
+   int nImgHeight = pFlagSurface->h;
+
+   int nMaxImgWidth = SCREEN_WIDTH / 2;
+   int nMaxImgHeight = SCREEN_HEIGHT / 2;
+
+   if (nImgWidth > nMaxImgWidth)
+   {
+      double d = (double)nMaxImgWidth / nImgWidth;
+      nImgWidth *= d;
+      nImgHeight *= d;
+   }
+   if (nImgHeight > nMaxImgHeight)
+   {
+      double d = (double)nMaxImgHeight / nImgHeight;
+      nImgWidth *= d;
+      nImgHeight *= d;
+   }
+
+   SDL_Surface* pSmallerFlagSurface = ScaleSurface(pFlagSurface, nImgWidth, nImgHeight);
+
+   SDL_Rect dst;
+   dst.x = 10;
+   dst.y = 32;
+   dst.w = nImgWidth;
+   dst.h = nImgHeight;
 
    SDL_BlitSurface(pSmallerFlagSurface, NULL, pShowFlagDetails->m_pScreen, &dst);
    SDL_FreeSurface(pSmallerFlagSurface);
 
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 15, GetCountryName(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
+   int nLeftText = dst.x + dst.w + 10;
 
    char buffer[16];
    IntToA(buffer, sizeof(buffer), GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
    CommaSeparate(buffer);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 50, "Square KM:", 0, 0, 0);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 65, buffer, 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 50, "Square KM:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 65, buffer, 0, 0, 0);
 
    IntToA(buffer, sizeof(buffer), GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
    CommaSeparate(buffer);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 90, "Population:", 0, 0, 0);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 105, buffer, 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 90, "Population:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 105, buffer, 0, 0, 0);
 
    SDL_UpdateRect(pShowFlagDetails->m_pScreen, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }

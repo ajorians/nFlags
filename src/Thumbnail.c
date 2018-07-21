@@ -93,6 +93,22 @@ void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selec
       SDL_Surface* pSurface = GetLoadedImage(pThumbnail->m_pImageLoader, pThumbnail->m_eFlag);
       if (pSurface != NULL)
       {
+         int nImgWidth = pSurface->w;
+         int nImgHeight = pSurface->h;
+
+         if (nImgWidth > maxWidth)
+         {
+            double d = (double)maxWidth / nImgWidth;
+            nImgWidth *= d;
+            nImgHeight *= d;
+         }
+         if (nImgHeight > maxHeight)
+         {
+            double d = (double)maxHeight / nImgHeight;
+            nImgWidth *= d;
+            nImgHeight *= d;
+         }
+
          SDL_Surface* pScaledSurface = ScaleSurface(pSurface, (Uint16)maxWidth, (Uint16)maxHeight);
          pSurface = NULL;//Does not own
 
@@ -103,10 +119,10 @@ void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selec
    if (pThumbnail->m_pThumbSurface != NULL)
    {
       SDL_Rect dst;
-      dst.x = (Sint16)x;
-      dst.y = (Sint16)y;
-      dst.w = (Sint16)maxWidth;
-      dst.h = (Sint16)maxHeight;
+      dst.w = pThumbnail->m_pThumbSurface->w;
+      dst.h = pThumbnail->m_pThumbSurface->h;
+      dst.x = (Sint16)x + ((maxWidth - dst.w) / 2);
+      dst.y = (Sint16)y + ((maxHeight - dst.h) / 2);
 
       SDL_BlitSurface(pThumbnail->m_pThumbSurface, NULL, pScreen, &dst);
    }

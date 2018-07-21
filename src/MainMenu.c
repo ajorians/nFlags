@@ -9,10 +9,11 @@
 
 #define MENU_SELECTOR_LINE_WIDTH (2)
 
-#define MENU_FLAG_MAX_WIDTH   (40)
-#define MENU_FLAG_MAX_HEIGHT  (30)
+#define MENU_FLAG_MAX_WIDTH   (80)
+#define MENU_FLAG_MAX_HEIGHT  (60)
 
-#define MENU_FLAG_SPACING_HORIZ  (10)
+#define MENU_FLAG_SPACING_HORIZ  (20)
+#define MENU_FLAG_SPACING_VERT   (20)
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen)
 {
@@ -25,19 +26,19 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
    pMenu->m_eChoice = ShowDetails;
    pMenu->m_eSelectedFlag = UnitedStates;
 
-   pMenu->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 24);
+   pMenu->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 16);
 
    CreateFlagInformation(&pMenu->m_pFlagInformation);
 
    int nNumFlags = GetNumberOfFlags(pMenu->m_pFlagInformation);
 
-   const int nNumFlagRows       = SCREEN_HEIGHT / (MENU_FLAG_MAX_HEIGHT + 10/*For subtitle*/);
-   const int nNumFlagColumns    = SCREEN_HEIGHT / (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
+   const int nNumFlagRows       = SCREEN_HEIGHT / (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
+   const int nNumFlagColumns    = SCREEN_WIDTH / (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
 
-   const int nNumRowsNeeded     = max(1, nNumFlags / nNumFlagColumns);
-   const int nNumColsNeeded     = max(1, nNumFlags / nNumRowsNeeded );
+   const int nNumRowsNeeded     = max(1, (nNumFlags + nNumFlagColumns) / nNumFlagColumns);
+   const int nNumColsNeeded     = max(1, (nNumFlags + nNumRowsNeeded )/ nNumRowsNeeded );
 
-   const int nFlagSurfaceHeight = nNumRowsNeeded * (MENU_FLAG_MAX_HEIGHT + 10/*For subtitle*/);
+   const int nFlagSurfaceHeight = nNumRowsNeeded * (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
    const int nFlagSurfaceWidth  = nNumColsNeeded * (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
 
    pMenu->m_pFlagsSurface = SDL_CreateRGBSurface(0, nFlagSurfaceWidth, nFlagSurfaceHeight, SCREEN_BIT_DEPTH, 0, 0, 0, 0);
@@ -171,7 +172,7 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
       if (nX >= pFlagsSurface->w)
       {
          nX = 0;
-         nY += MENU_FLAG_MAX_HEIGHT;
+         nY += MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT;
       }
    }
 }
