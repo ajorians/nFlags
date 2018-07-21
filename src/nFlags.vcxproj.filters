@@ -39,6 +39,9 @@
     <ClCompile Include="FlagInformation.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShowFlagDetails.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlagEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowFlagDetails.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -142,6 +142,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="MainMenu.c" />
     <ClCompile Include="Replacements.c" />
+    <ClCompile Include="ShowFlagDetails.c" />
     <ClCompile Include="Thumbnail.c" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Replacements.h" />
+    <ClInclude Include="ShowFlagDetails.h" />
     <ClInclude Include="Thumbnail.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -27,6 +27,24 @@ int GetNumberOfFlags(struct FlagInformation* pFlagInformation)
    return (int)FLAGS_MAX;
 }
 
+const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag)
+{
+   switch (flag)
+   {
+   default:
+   case Brazil:
+      return "Brazil";
+   case UnitedStates:
+      return "United States of America";
+   case Turkey:
+      return "Turkey";
+   case Israel:
+      return "Israel";
+   case Germany:
+      return "Germany";
+   }
+}
+
 #ifndef _TINSPIRE
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag)
 {

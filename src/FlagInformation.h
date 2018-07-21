@@ -14,6 +14,7 @@ struct FlagInformation
 void CreateFlagInformation(struct FlagInformation** ppFlagInformation);
 void FreeFlagInformation(struct FlagInformation** ppFlagInformation);
 int GetNumberOfFlags(struct FlagInformation* pFlagInformation);
+const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag);
 #ifndef _TINSPIRE
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag);
 #endif

@@ -4,6 +4,7 @@
 #endif
 #include <SDL/SDL.h>
 #include "MainMenu.h"
+#include "ShowFlagDetails.h"
 #include "Config.h"
 #ifndef _TINSPIRE
 #include <SDL/SDL_ttf.h>
@@ -82,6 +83,9 @@ int main(int argc, char *argv[])
       }
 
       //Show Details
+      struct ShowFlagDetails* pFlagDetails = NULL;
+      CreateShowFlagDetails(&pFlagDetails, pScreen);
+      while (ShowFlagDetailsLoop(pFlagDetails)) {}
    }
 
    FreeConfig(&pConfig);
