@@ -16,7 +16,7 @@ void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SD
 
    pDetails->m_eFlag = eFlag;
 
-   pDetails->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 16);
+   pDetails->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 12);
 
    CreateFlagInformation(&pDetails->m_pFlagInformation);
 
@@ -98,7 +98,7 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
 
    return 1;
 }
-
+extern SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
 void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 {
 #ifdef _TINSPIRE
@@ -111,14 +111,29 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 #endif
 
    SDL_Rect dst;
-   dst.x = 40;
-   dst.y = 40;
-   dst.w = SCREEN_WIDTH - (dst.x * 2);
-   dst.h = SCREEN_HEIGHT - (dst.y * 2);
+   dst.x = 10;
+   dst.y = 10;
+   dst.w = SCREEN_WIDTH/2;
+   dst.h = SCREEN_HEIGHT/2;
    SDL_Surface* pFlagSurface = GetLoadedImage(pShowFlagDetails->m_pImageLoader, pShowFlagDetails->m_eFlag);
-   SDL_BlitSurface(pFlagSurface, NULL, pShowFlagDetails->m_pScreen, &dst);
+
+   SDL_Surface* pSmallerFlagSurface = ScaleSurface(pFlagSurface, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+   SDL_BlitSurface(pSmallerFlagSurface, NULL, pShowFlagDetails->m_pScreen, &dst);
+   SDL_FreeSurface(pSmallerFlagSurface);
 
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 15, GetCountryName(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
+
+   char buffer[16];
+   IntToA(buffer, sizeof(buffer), GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
+   CommaSeparate(buffer);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 50, "Square KM:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 65, buffer, 0, 0, 0);
+
+   IntToA(buffer, sizeof(buffer), GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
+   CommaSeparate(buffer);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 90, "Population:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, SCREEN_WIDTH / 2, 105, buffer, 0, 0, 0);
 
    SDL_UpdateRect(pShowFlagDetails->m_pScreen, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }

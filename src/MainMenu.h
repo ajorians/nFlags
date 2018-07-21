@@ -26,6 +26,7 @@ struct MainMenu
    struct Config* m_pConfig;//Does not own
    struct SDL_Surface* m_pScreen;//Does not own
    struct SDL_Surface* m_pTitle;
+   struct SDL_Surface* m_pFlagsSurface;
    struct FlagInformation* m_pFlagInformation;
    struct ImageLoader* m_pImageLoader;
    struct Thumbnail** m_ppThumbnails;

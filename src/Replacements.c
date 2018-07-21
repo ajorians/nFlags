@@ -19,6 +19,28 @@ void IntToA(char* pstrBuffer, int bufferSize, int n)
 #endif
 }
 
+void CommaSeparate(char* pstrBuffer)
+{
+   int nLen = strlen(pstrBuffer);
+   int nCommasToAdd = (nLen - 1) / 3;
+   if (nCommasToAdd <= 0)
+      return;
+
+   pstrBuffer[nLen - 1 /*index*/ + nCommasToAdd + 1] = '\0';
+   int nDigit = 0;
+   for (int i = nLen-1/*index*/; i >= 0; i--)
+   {
+      pstrBuffer[i + nCommasToAdd] = pstrBuffer[i];
+      nDigit++;
+      if (nDigit == 3 && nCommasToAdd > 0)
+      {
+         nCommasToAdd--;
+         pstrBuffer[i + nCommasToAdd] = ',';
+         nDigit = 0;
+      }
+   }
+}
+
 void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput)
 {
 #ifdef _TINSPIRE

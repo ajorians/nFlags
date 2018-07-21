@@ -10,6 +10,8 @@
 
 void IntToA(char* pstrBuffer, int bufferSize, int n);
 
+void CommaSeparate(char* pstrBuffer);
+
 void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput);
 
 void StringAppend(char* pstrBuffer, int nSize, char* pstrAddition);
