@@ -136,16 +136,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Config.c" />
+    <ClCompile Include="FlagInformation.c" />
     <ClCompile Include="Font.c" />
+    <ClCompile Include="ImageLoader.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="MainMenu.c" />
     <ClCompile Include="Replacements.c" />
+    <ClCompile Include="Thumbnail.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="FlagEnum.h" />
+    <ClInclude Include="FlagInformation.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Replacements.h" />
+    <ClInclude Include="Thumbnail.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

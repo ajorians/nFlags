@@ -30,6 +30,15 @@
     <ClCompile Include="Replacements.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImageLoader.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thumbnail.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlagInformation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -42,6 +51,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Replacements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Thumbnail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagInformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

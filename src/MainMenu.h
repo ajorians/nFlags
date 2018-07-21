@@ -7,6 +7,10 @@
 #include "SDL/SDL.h"
 #include "Config.h"
 #include "Font.h"
+#include "ImageLoader.h"
+#include "Thumbnail.h"
+#include "FlagInformation.h"
+#include "FlagEnum.h"
 
 enum MenuChoice
 {
@@ -23,6 +27,10 @@ struct MainMenu
    struct Config* m_pConfig;//Does not own
    struct SDL_Surface* m_pScreen;//Does not own
    struct SDL_Surface* m_pTitle;
+   struct FlagInformation* m_pFlagInformation;
+   struct ImageLoader* m_pImageLoader;
+   struct Thumbnail** m_ppThumbnails;
+   enum Flags m_eNextFlagImageToLoad;
 };
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen);
