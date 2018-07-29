@@ -3,7 +3,10 @@
 
 #ifdef _TINSPIRE
 #include <os.h>
+#else
+#include <stdint.h>
 #endif
+
 #include "FlagEnum.h"
 
 struct FlagInformation
@@ -17,8 +20,11 @@ int GetNumberOfFlags(struct FlagInformation* pFlagInformation);
 const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag);
 int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag);
 int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags flag);
-#ifndef _TINSPIRE
+#ifdef _WIN32
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag);
+#else
+unsigned char* GetImgDataForFlag(struct FlagInformation* pFlagInformation, enum Flags flag);
+int GetImgDataSizeForFlag(struct FlagInformation* pFlagInformation, enum Flags flag);
 #endif
 
 #endif

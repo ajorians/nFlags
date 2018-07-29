@@ -8,9 +8,6 @@
 #include "Config.h"
 #ifndef _TINSPIRE
 #include <SDL/SDL_ttf.h>
-#ifndef _WIN32
-#include <sys/stat.h>
-#endif
 #endif
 #include "Replacements.h"
 

@@ -63,7 +63,7 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
    pMenu->m_eNextFlagImageToLoad = Afghanistan;
 
 #ifdef _TINSPIRE
-   pMenu->m_pTitle = nSDL_LoadImage(image_TwoDigits);
+   //pMenu->m_pTitle = nSDL_LoadImage(image_TwoDigits);
 #endif
 }
 
