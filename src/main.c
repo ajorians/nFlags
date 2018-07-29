@@ -70,18 +70,15 @@ int main(int argc, char *argv[])
 
    struct Config* pConfig = NULL;
    CreateConfig(&pConfig);
+   struct MainMenu* pMenu = NULL;
+   CreateMainMenu(&pMenu, pConfig, pScreen);
    while(1) {
-      struct MainMenu* pMenu = NULL;
-      CreateMainMenu(&pMenu, pConfig, pScreen);
       while(MainMenuLoop(pMenu)){}
       if (MainMenuShouldQuit(pMenu) == 1)
       {
-         FreeMainMenu(&pMenu);
          break;
       }
       enum Flags eSelectedFlag = MainMenuGetSelectedFlag(pMenu);
-      FreeMainMenu(&pMenu);
-      pMenu = NULL;
 
       //Show Details
       struct ShowFlagDetails* pFlagDetails = NULL;
@@ -90,6 +87,8 @@ int main(int argc, char *argv[])
       FreeShowFlagDetails(&pFlagDetails);
       pFlagDetails = NULL;
    }
+   FreeMainMenu(&pMenu);
+   pMenu = NULL;
 
    FreeConfig(&pConfig);
 

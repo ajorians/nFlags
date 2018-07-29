@@ -103,14 +103,15 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
 extern SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
 void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 {
+   int r = 255, g = 215, b = 139;
 #ifdef _TINSPIRE
    if (!has_colors)
    {
-      SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pShowFlagDetails->m_pScreen->format, 255, 255, 255));
+      r = 255, g = 255, b = 255;
    }
-#else
-   SDL_FillRect(pShowFlagDetails->m_pScreen, NULL, SDL_MapRGB(pShowFlagDetails->m_pScreen->format, 255, 215, 139));
 #endif
+
+   SDL_FillRect(pShowFlagDetails->m_pScreen, NULL, SDL_MapRGB(pShowFlagDetails->m_pScreen->format, r, g, b));
 
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 15, GetCountryName(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
 

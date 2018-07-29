@@ -26,7 +26,7 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
    pMenu->m_pScreen = pScreen;
 
    pMenu->m_eChoice = ShowDetails;
-   pMenu->m_eSelectedFlag = UnitedStates;
+   pMenu->m_eSelectedFlag = TheUnitedStates;
 
    pMenu->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 16);
 
@@ -196,14 +196,15 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface, int* p
 
 void UpdateDisplay(struct MainMenu* pMenu)
 {
+   int r = 255, g = 215, b = 139;
 #ifdef _TINSPIRE
    if (!has_colors)
    {
-      SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, 255, 255, 255));
+      r = 255, g = 255, b = 255;
    }
-#else
-   SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, 255, 215, 139));
 #endif
+
+   SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, r, g, b));
 
    DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "nFlags", 0, 0, 0);
 

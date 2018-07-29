@@ -2,7 +2,7 @@ GCC = nspire-gcc
 LD = nspire-ld
 GENZEHN = genzehn
 
-GCCFLAGS = -Os -Wall -W -marm -Wno-unused-parameter -I include
+GCCFLAGS = -Os -Wall -W -marm -Wno-unused-parameter -I include -I libjpeg
 LDFLAGS = -L lib -L zlib -L libjpeg -lndls -lArchive -lz -ljpeg
 OBJCOPY := "$(shell which arm-elf-objcopy 2>/dev/null)"
 ifeq (${OBJCOPY},"")
@@ -21,7 +21,7 @@ prepare:
 	cd ArchiveLib; make; cd ..
 	cd libz; make; cd ..
 	cd libjpeg; make; cd ..
-	cd Images; make; cd ..
+#	cd Images; make; cd ..
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -c $<
@@ -40,7 +40,7 @@ clean:
 	cd ArchiveLib; make clean
 	cd libjpeg; make clean
 	cd libz; make clean
-	cd Images; make clean
+#	cd Images; make clean
 	rm -rf lib
 	rm -f *.o *.elf
 	rm -f $(DISTDIR)/$(EXE).tns

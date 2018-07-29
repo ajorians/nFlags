@@ -4,11 +4,11 @@ CONVERTFLAGS = --format jpgdata
 IMAGE_OBJS = $(patsubst %.bmp,%.h,$(wildcard *.bmp))
 IMAGE_JPGS = $(patsubst %.bmp,%.jpg,$(wildcard *.bmp))
 
-%.h: %.bmp
+%.h: %.png
 	$(CONVERTIMG) $(CONVERTFLAGS) $^ $@
 
-%.jpg: %.bmp
-	convert $^ $@
+%.png: %.bmp
+	convert -resize 160x120 $^ $@
 
 #all: $(IMAGE_JPGS)
 all: $(IMAGE_OBJS)
