@@ -20,8 +20,7 @@ void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SD
 
    CreateFlagInformation(&pDetails->m_pFlagInformation);
 
-   CreateImageLoader(&pDetails->m_pImageLoader, 1);
-   LoadFlagImage(pDetails->m_pImageLoader, pDetails->m_pFlagInformation, pDetails->m_eFlag);
+   pDetails->m_pFlag = GetFlagImage(pDetails->m_pFlagInformation, eFlag);
 }
 
 void FreeShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails)
@@ -30,7 +29,8 @@ void FreeShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails)
 
    FreeFont(pDetails->m_pFont);
    pDetails->m_pFont = NULL;
-   FreeImageLoader(&pDetails->m_pImageLoader);
+   SDL_FreeSurface(pDetails->m_pFlag);
+   pDetails->m_pFlag = NULL;
    FreeFlagInformation(&pDetails->m_pFlagInformation);
 
    pDetails->m_pScreen = NULL;//Does not own
@@ -60,7 +60,8 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
             if (pDetails->m_eFlag > (enum Flags)0)
             {
                pDetails->m_eFlag--;
-               LoadFlagImage(pDetails->m_pImageLoader, pDetails->m_pFlagInformation, pDetails->m_eFlag);
+               SDL_FreeSurface(pDetails->m_pFlag);
+               pDetails->m_pFlag = GetFlagImage(pDetails->m_pFlagInformation, pDetails->m_eFlag);
             }
             break;
 
@@ -69,7 +70,8 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
             if (pDetails->m_eFlag < (enum Flags)(FLAGS_MAX - 1))
             {
                pDetails->m_eFlag++;
-               LoadFlagImage(pDetails->m_pImageLoader, pDetails->m_pFlagInformation, pDetails->m_eFlag);
+               SDL_FreeSurface(pDetails->m_pFlag);
+               pDetails->m_pFlag = GetFlagImage(pDetails->m_pFlagInformation, pDetails->m_eFlag);
             }
             break;
 
@@ -100,7 +102,7 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
 
    return 1;
 }
-extern SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
+//extern SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
 void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 {
    int r = 255, g = 215, b = 139;
@@ -115,10 +117,8 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 15, GetCountryName(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
 
-   SDL_Surface* pFlagSurface = GetLoadedImage(pShowFlagDetails->m_pImageLoader, pShowFlagDetails->m_eFlag);
-
-   int nImgWidth = pFlagSurface->w;
-   int nImgHeight = pFlagSurface->h;
+   int nImgWidth = pShowFlagDetails->m_pFlag->w;
+   int nImgHeight = pShowFlagDetails->m_pFlag->h;
 
    int nMaxImgWidth = SCREEN_WIDTH / 2;
    int nMaxImgHeight = SCREEN_HEIGHT / 2;
@@ -136,16 +136,13 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
       nImgHeight *= d;
    }
 
-   SDL_Surface* pSmallerFlagSurface = ScaleSurface(pFlagSurface, nImgWidth, nImgHeight);
-
    SDL_Rect dst;
    dst.x = 10;
    dst.y = 32;
    dst.w = nImgWidth;
    dst.h = nImgHeight;
 
-   SDL_BlitSurface(pSmallerFlagSurface, NULL, pShowFlagDetails->m_pScreen, &dst);
-   SDL_FreeSurface(pSmallerFlagSurface);
+   SDL_BlitSurface(pShowFlagDetails->m_pFlag, NULL, pShowFlagDetails->m_pScreen, &dst);
 
    int nLeftText = dst.x + dst.w + 10;
 
@@ -159,6 +156,27 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
    CommaSeparate(buffer);
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 90, "Population:", 0, 0, 0);
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 105, buffer, 0, 0, 0);
+
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 160, "Capital:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 70, 160, GetCapital(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
+
+#if 1
+   int areaComparedToUS = ((int)(GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag)*100.0/GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, TheUnitedStates)));
+   IntToA(buffer, sizeof(buffer), areaComparedToUS);
+   CommaSeparate(buffer);
+   strcat(buffer, "%");
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 180, "Area Compared To US:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 195, buffer, 0, 0, 0);
+
+   int populationComparedToUS = ((int)(GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag)*100.0/GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, TheUnitedStates)));
+   IntToA(buffer, sizeof(buffer), populationComparedToUS);
+   CommaSeparate(buffer);
+   strcat(buffer, "%");
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 210, "Population Compared To US:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 225, buffer, 0, 0, 0);
+
+
+#endif
 
    SDL_UpdateRect(pShowFlagDetails->m_pScreen, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }

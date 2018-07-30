@@ -207,17 +207,18 @@
 #include "Images/zw.h"
 
 #ifndef _WIN32
-#define C(e, n, cap, pop, km, img, path) { e, n, km, pop, img, sizeof(img)}
+#define C(e, n, cap, pop, km, img, path) { e, n, cap, km, pop, img, sizeof(img)}
 #define P(s) "../../src/" s
 #else
 #define P(s) s
-#define C(e, n, pop, km, img, path) { e, n, km, pop, path}
+#define C(e, n, cap, pop, km, img, path) { e, n, cap, km, pop, path}
 #endif
 
 struct FlagInfo
 {
    enum Flags eFlag;
    const char* pstrCountryName;
+   const char* pstrCapital;
    int nSqKMs;
    int nPopulation;
 #ifdef _WIN32
@@ -458,6 +459,14 @@ const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags 
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrCountryName;
+   return "";
+}
+
+const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag)
+{
+   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+      if (g_FlagInfo[i].eFlag == flag)
+         return g_FlagInfo[i].pstrCapital;
    return "";
 }
 

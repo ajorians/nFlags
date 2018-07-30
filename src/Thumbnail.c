@@ -46,47 +46,6 @@ SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height)
 static Font *g_pFontThumbnail = NULL;
 static int g_nThumbnailCount = 0;
 
-void CreateThumbnail(struct Thumbnail** ppThumbnail, struct FlagInformation* pFlagInformation, struct ImageLoader* pImageLoader, enum Flags eFlag)
-{
-   *ppThumbnail = malloc(sizeof(struct Thumbnail));
-   struct Thumbnail* pThumbnail = (*ppThumbnail);
-
-   pThumbnail->m_pFlagInformation = pFlagInformation;
-   pThumbnail->m_pImageLoader = pImageLoader;
-   pThumbnail->m_eFlag = eFlag;
-   pThumbnail->m_pThumbSurface = NULL;
-
-   if (g_nThumbnailCount == 0)
-   {
-      g_pFontThumbnail = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 10);
-   }
-   g_nThumbnailCount++;
-}
-
-void FreeThumbnail(struct Thumbnail** ppThumbnail)
-{
-   struct Thumbnail* pThumbnail = *ppThumbnail;
-
-   if (pThumbnail->m_pThumbSurface)
-   {
-      SDL_FreeSurface(pThumbnail->m_pThumbSurface);
-      pThumbnail->m_pThumbSurface = NULL;
-   }
-
-   pThumbnail->m_pFlagInformation = NULL;//Does not own
-   pThumbnail->m_pImageLoader = NULL;//Does not own
-
-   g_nThumbnailCount--;
-   if (g_nThumbnailCount == 0)
-   {
-      FreeFont(g_pFontThumbnail);
-      g_pFontThumbnail = NULL;
-   }
-
-   free(*ppThumbnail);
-   *ppThumbnail = NULL;
-}
-
 void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth, char* pstrBuffer, int r, int g, int b)
 {
    char buffer[50];
@@ -113,50 +72,37 @@ void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth,
    DrawText(pSurface, pFont, x, y, buffer, r, g, b);
 }
 
-void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selected, int x, int y, int maxWidth, int maxHeight)
+void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, SDL_Surface* pScreen, int x, int y, int maxWidth, int maxHeight)
 {
-   if (pThumbnail->m_pThumbSurface == NULL)
+   SDL_Surface* pSurface = GetFlagImage(pFlagInformation, eFlag);
+
+   int nImgWidth = pSurface->w;
+   int nImgHeight = pSurface->h;
+
+   if (nImgWidth > maxWidth)
    {
-      SDL_Surface* pSurface = GetLoadedImage(pThumbnail->m_pImageLoader, pThumbnail->m_eFlag);
-      if (pSurface != NULL)
-      {
-         int nImgWidth = pSurface->w;
-         int nImgHeight = pSurface->h;
-
-         if (nImgWidth > maxWidth)
-         {
-            double d = (double)maxWidth / nImgWidth;
-            nImgWidth *= d;
-            nImgHeight *= d;
-         }
-         if (nImgHeight > maxHeight)
-         {
-            double d = (double)maxHeight / nImgHeight;
-            nImgWidth *= d;
-            nImgHeight *= d;
-         }
-
-         SDL_Surface* pScaledSurface = ScaleSurface(pSurface, (Uint16)maxWidth, (Uint16)maxHeight);
-         pSurface = NULL;//Does not own
-
-         pThumbnail->m_pThumbSurface = pScaledSurface;
-      }
+      double d = (double)maxWidth / nImgWidth;
+      nImgWidth *= d;
+      nImgHeight *= d;
+   }
+   if (nImgHeight > maxHeight)
+   {
+      double d = (double)maxHeight / nImgHeight;
+      nImgWidth *= d;
+      nImgHeight *= d;
    }
 
-   if (pThumbnail->m_pThumbSurface != NULL)
-   {
-      SDL_Rect dst;
-      dst.w = pThumbnail->m_pThumbSurface->w;
-      dst.h = pThumbnail->m_pThumbSurface->h;
-      dst.x = (Sint16)x + ((maxWidth - dst.w) / 2);
-      dst.y = (Sint16)y + ((maxHeight - dst.h) / 2);
+   SDL_Surface* pScaledSurface = ScaleSurface(pSurface, (Uint16)maxWidth, (Uint16)maxHeight);
+   SDL_FreeSurface(pSurface);
+   pSurface = NULL;
 
-      SDL_BlitSurface(pThumbnail->m_pThumbSurface, NULL, pScreen, &dst);
-   }
 
-   if (selected == 1)
-   {
-      const char* pstrCountryName = GetCountryName(pThumbnail->m_pFlagInformation, pThumbnail->m_eFlag);
-      SmartDrawText(pScreen, g_pFontThumbnail, x, y + maxHeight, maxWidth, pstrCountryName, 0, 0, 0);
-   }
+   SDL_Rect dst;
+   dst.w = pScaledSurface->w;
+   dst.h = pScaledSurface->h;
+   dst.x = (Sint16)x + ((maxWidth - dst.w) / 2);
+   dst.y = (Sint16)y + ((maxHeight - dst.h) / 2);
+
+   SDL_BlitSurface(pScaledSurface, NULL, pScreen, &dst);
+
 }
