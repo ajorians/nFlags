@@ -1,5 +1,5 @@
 CONVERTIMG = ConvertImg
-CONVERTFLAGS = --format jpgdata
+CONVERTFLAGS = --format jpgdata --compression 40
 
 IMAGE_OBJS = $(patsubst %.bmp,%.h,$(wildcard *.bmp))
 IMAGE_JPGS = $(patsubst %.bmp,%.jpg,$(wildcard *.bmp))
