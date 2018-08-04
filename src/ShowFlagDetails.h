@@ -16,7 +16,7 @@ struct ShowFlagDetails
    Font *m_pFont;
    struct SDL_Surface* m_pScreen;//Does not own
    struct FlagInformation* m_pFlagInformation;
-   struct ImageLoader* m_pImageLoader;
+   struct SDL_Surface* m_pFlag;
 };
 
 void CreateShowFlagDetails(struct ShowFlagDetails** ppShowFlagDetails, struct SDL_Surface* pScreen, enum Flags eFlag);

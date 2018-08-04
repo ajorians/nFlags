@@ -8,6 +8,12 @@
 
 #define SCREEN_BIT_DEPTH        (16)
 
+#undef min
+#undef max
+
+int min(int a, int b);
+int max(int a, int b);
+
 void IntToA(char* pstrBuffer, int bufferSize, int n);
 
 void CommaSeparate(char* pstrBuffer);

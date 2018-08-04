@@ -8,17 +8,9 @@
 #include "ImageLoader.h"
 #include "FlagInformation.h"
 #include "FlagEnum.h"
+#include "Font.h"
 
-struct Thumbnail
-{
-   SDL_Surface* m_pThumbSurface;
-   enum Flags m_eFlag;
-   struct FlagInformation* m_pFlagInformation;//Does not own
-   struct ImageLoader* m_pImageLoader;//Does not own
-};
-
-void CreateThumbnail(struct Thumbnail** ppThumbnail, struct FlagInformation* pFlagInformation, struct ImageLoader* pImageLoader, enum Flags eFlag);
-void FreeThumbnail(struct Thumbnail** ppThumbnail);
-void DrawThumbnail(struct Thumbnail* pThumbnail, SDL_Surface* pScreen, int selected, int x, int y, int maxWidth, int maxHeight);
+void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth, char* pstrBuffer, int r, int g, int b);
+void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, SDL_Surface* pScreen, int x, int y, int maxWidth, int maxHeight);
 
 #endif

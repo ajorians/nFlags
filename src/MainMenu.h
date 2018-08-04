@@ -7,8 +7,6 @@
 #include "SDL/SDL.h"
 #include "Config.h"
 #include "Font.h"
-#include "ImageLoader.h"
-#include "Thumbnail.h"
 #include "FlagInformation.h"
 #include "FlagEnum.h"
 
@@ -21,6 +19,7 @@ enum MenuChoice
 struct MainMenu
 {
    enum MenuChoice m_eChoice;
+   enum Flags m_eLastSelectedFlag;
    enum Flags m_eSelectedFlag;
    int m_nItemsPerRow;
    int m_nSrcScrollX;
@@ -31,8 +30,6 @@ struct MainMenu
    struct SDL_Surface* m_pTitle;
    struct SDL_Surface* m_pFlagsSurface;
    struct FlagInformation* m_pFlagInformation;
-   struct ImageLoader* m_pImageLoader;
-   struct Thumbnail** m_ppThumbnails;
    enum Flags m_eNextFlagImageToLoad;
 };
 

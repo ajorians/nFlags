@@ -27,9 +27,9 @@ void CreateConfig(struct Config** ppConfig)
 
       char buffer[16];
 
-      StringCopy(buffer, sizeof(buffer), "LastLevel");
+      StringCopy(buffer, sizeof(buffer), "LastCountry");
       if( strcmp(strName, buffer) == 0 ) {
-         pConfig->m_nLastLevel = atoi( GetValue(pConfig->m_Archive, "Settings", i) );
+         pConfig->m_nLastCountry = atoi( GetValue(pConfig->m_Archive, "Settings", i) );
       }
    }
 #endif
@@ -42,18 +42,13 @@ void FreeConfig(struct Config** ppConfig)
    struct Config* pConfig = *ppConfig;
 #ifndef _WIN32
    ArchiveSetBatchMode(pConfig->m_Archive, ARCHIVE_ENABLE_BATCH);
-   for(int nLevel=0; nLevel<(int)(sizeof(pConfig->m_nBeatLevels)/sizeof(pConfig->m_nBeatLevels[0])); nLevel++) {
-      sprintf(buffer, "%d", pConfig->m_nBeatLevels[nLevel]);
-      sprintf(bufferName, "Level%d", nLevel);
-      UpdateArchiveEntry(pConfig->m_Archive, "Settings", bufferName, buffer, NULL);
-   }
 
-   sprintf(buffer, "%d", pConfig->m_nDrawBackground);
+   /*sprintf(buffer, "%d", pConfig->m_nDrawBackground);
    strcpy(bufferName, "DrawBkg");
-   UpdateArchiveEntry(pConfig->m_Archive, "Settings", bufferName, buffer, NULL);
+   UpdateArchiveEntry(pConfig->m_Archive, "Settings", bufferName, buffer, NULL);*/
 
-   sprintf(buffer, "%d", pConfig->m_nLastLevel);
-   strcpy(bufferName, "LastLevel");
+   sprintf(buffer, "%d", pConfig->m_nLastCountry);
+   strcpy(bufferName, "LastCountry");
    UpdateArchiveEntry(pConfig->m_Archive, "Settings", bufferName, buffer, NULL);
 
    ArchiveSetBatchMode(pConfig->m_Archive, ARCHIVE_DISABLE_BATCH);
