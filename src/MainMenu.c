@@ -203,7 +203,7 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
             SDL_Rect dst;
             dst.x = nX;
             dst.y = nY + MENU_FLAG_MAX_HEIGHT;
-            dst.w = min(pMenu->m_pFlagsSurface->w - dst.w, MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
+            dst.w = min(pMenu->m_pFlagsSurface->w - dst.x, MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
             dst.h = min(pMenu->m_pFlagsSurface->h - dst.y, MENU_FLAG_SPACING_VERT);
 
             SDL_FillRect(pFlagsSurface, &dst, SDL_MapRGB(pMenu->m_pFlagsSurface->format, 255, 215, 139));
@@ -254,13 +254,13 @@ void UpdateDisplay(struct MainMenu* pMenu)
    if( pMenu->m_eNextFlagImageToLoad != FLAGS_MAX )
    {
       char text[32];
-      strcpy(text, "Loading Flag ");
+      StringCopy(text, sizeof(text), "Loading Flag ");
       char buffer[8];
       IntToA(buffer, sizeof(buffer), (int)pMenu->m_eNextFlagImageToLoad);
-      strcat(text, buffer);
-      strcat(text, " of ");
+      StringAppend(text, sizeof(text), buffer);
+      StringAppend(text, sizeof(text), " of ");
       IntToA(buffer, sizeof(buffer), (int)FLAGS_MAX);
-      strcat(text, buffer);
+      StringAppend(text, sizeof(text), buffer);
 
       DrawText(pMenu->m_pScreen, pMenu->m_pFont, SCREEN_WIDTH / 3, MENU_TITLE_TOP, text, 0, 0, 0);
    }

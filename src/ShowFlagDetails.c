@@ -164,14 +164,14 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
    int areaComparedToUS = ((int)(GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag)*100.0/GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, TheUnitedStates)));
    IntToA(buffer, sizeof(buffer), areaComparedToUS);
    CommaSeparate(buffer);
-   strcat(buffer, "%");
+   StringAppend(buffer, sizeof(buffer), "%");
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 180, "Area Compared To US:", 0, 0, 0);
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 195, buffer, 0, 0, 0);
 
    int populationComparedToUS = ((int)(GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag)*100.0/GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, TheUnitedStates)));
    IntToA(buffer, sizeof(buffer), populationComparedToUS);
    CommaSeparate(buffer);
-   strcat(buffer, "%");
+   StringAppend(buffer, sizeof(buffer), "%");
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 210, "Population Compared To US:", 0, 0, 0);
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 225, buffer, 0, 0, 0);
 

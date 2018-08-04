@@ -9,9 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#else
+#include <stdio.h>
+#endif
 #include <jpeglib.h>
 #include <jinclude.h>
-#endif
 
 #include "ImageLoader.h"
 #include "Replacements.h"
@@ -19,6 +21,7 @@
 extern Uint16 get_pixel16(SDL_Surface *surface, int x, int y);
 extern void put_pixel16(SDL_Surface *surface, int x, int y, Uint16 pixel);
 
+#ifndef _WIN32
 /* Read JPEG image from a memory segment */
 static void init_source (j_decompress_ptr cinfo) {}
 static boolean fill_input_buffer (j_decompress_ptr cinfo)
@@ -205,6 +208,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    return pSurface;
 
 }
+
+#endif
 
 SDL_Surface* GetFlagImage(struct FlagInformation* pFlagInformation, enum Flags flag)
 {

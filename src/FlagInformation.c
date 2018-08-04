@@ -6,6 +6,7 @@
 #endif
 #include "FlagInformation.h"
 
+#ifndef _WIN32
 #include "Images/af.h"
 #include "Images/al.h"
 #include "Images/dz.h"
@@ -205,6 +206,7 @@
 #include "Images/ye.h"
 #include "Images/zm.h"
 #include "Images/zw.h"
+#endif
 
 #ifndef _WIN32
 #define C(e, n, cap, pop, km, img, path) { e, n, cap, km, pop, img, sizeof(img)}
