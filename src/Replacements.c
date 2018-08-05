@@ -31,7 +31,7 @@ void IntToA(char* pstrBuffer, int bufferSize, int n)
 
 void CommaSeparate(char* pstrBuffer)
 {
-   int nLen = strlen(pstrBuffer);
+   int nLen = (int)strlen(pstrBuffer);
    int nCommasToAdd = (nLen - 1) / 3;
    if (nCommasToAdd <= 0)
       return;

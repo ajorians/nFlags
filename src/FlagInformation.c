@@ -441,6 +441,7 @@ void CreateFlagInformation(struct FlagInformation** ppFlagInformation)
    struct FlagInformation* pFlagInformation = (*ppFlagInformation);
 
    //Initialize stuff here
+   (pFlagInformation);
 }
 
 void FreeFlagInformation(struct FlagInformation** ppFlagInformation)
@@ -453,11 +454,13 @@ void FreeFlagInformation(struct FlagInformation** ppFlagInformation)
 
 int GetNumberOfFlags(struct FlagInformation* pFlagInformation)
 {
+   (pFlagInformation);
    return sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]);
 }
 
 const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrCountryName;
@@ -466,6 +469,7 @@ const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags 
 
 const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrCapital;
@@ -474,6 +478,7 @@ const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag
 
 int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].nSqKMs;
@@ -482,6 +487,7 @@ int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag
 
 int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].nPopulation;
@@ -491,6 +497,7 @@ int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags fl
 #ifdef _WIN32
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrImagePath;

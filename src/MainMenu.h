@@ -27,10 +27,9 @@ struct MainMenu
    Font *m_pFont;
    struct Config* m_pConfig;//Does not own
    struct SDL_Surface* m_pScreen;//Does not own
-   struct SDL_Surface* m_pTitle;
    struct SDL_Surface* m_pFlagsSurface;
    struct FlagInformation* m_pFlagInformation;
-   enum Flags m_eNextFlagImageToLoad;
+   short* m_pbAlreadyLoadedImages;
 };
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen);

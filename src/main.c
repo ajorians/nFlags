@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
 #endif
 {
 #ifdef _WIN32
+   (argc);
    (argv);
 #endif
 #ifdef _TINSPIRE
