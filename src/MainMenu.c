@@ -71,10 +71,9 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
       x += MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
    }
 
-   pMenu->m_pbAlreadyLoadedImages = malloc(sizeof(enum Flags) * nNumFlags);
    for (int i = 0; i < nNumFlags; i++)
    {
-      pMenu->m_pbAlreadyLoadedImages[i] = 0;
+      pMenu->m_bAlreadyLoadedImages[i] = 0;
    }
 }
 
@@ -86,7 +85,6 @@ void FreeMainMenu(struct MainMenu** ppMenu)
    FreeFlagInformation(&pMenu->m_pFlagInformation);
    SDL_FreeSurface(pMenu->m_pFlagsSurface);
    pMenu->m_pFlagsSurface = NULL;
-   free(pMenu->m_pbAlreadyLoadedImages);
 
    pMenu->m_pConfig->m_nLastCountry = pMenu->m_eSelectedFlag;
 
@@ -187,8 +185,6 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
       pMenu->m_eLastSelectedFlag = FLAGS_MAX;
    }
 
-   TRACE("Before draw text for selected flag\n");
-
    //Draw text for selected flag
    {
       int nX, nY;
@@ -197,7 +193,6 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
       SmartDrawText(pFlagsSurface, pMenu->m_pFont, nX, nY + MENU_FLAG_MAX_HEIGHT, MENU_FLAG_MAX_WIDTH, GetCountryName(pMenu->m_pFlagInformation, pMenu->m_eSelectedFlag), 0, 0, 0);
    }
 
-   TRACE("Before drawing surrounding flags\n");
    int nSelectedIndex = (int)pMenu->m_eSelectedFlag;
    for (int nDistanceFromSelectedFlag = 1; nDistanceFromSelectedFlag < (3/*Spots away*/ * 2/*both directions*/ + 1/*Current item*/); nDistanceFromSelectedFlag++)
    {
@@ -214,13 +209,13 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
 
             enum Flags eFlag = (enum Flags)nPotentialIndex;
 
-            if (pMenu->m_pbAlreadyLoadedImages[(int)eFlag] == 0)
+            if (pMenu->m_bAlreadyLoadedImages[(int)eFlag] == 0)
             {
                int nX, nY;
                GetCoordinatesForFlag(eFlag, pMenu->m_nItemsPerRow, &nX, &nY);
 
                DrawFlagThumbnail(pMenu->m_pFlagInformation, eFlag, pFlagsSurface, nX, nY, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
-               pMenu->m_pbAlreadyLoadedImages[(int)eFlag] = 1;
+               pMenu->m_bAlreadyLoadedImages[(int)eFlag] = 1;
                return;//Optimization so other thumbnails will say loading for now
             }
          }
@@ -230,7 +225,6 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
 
 void UpdateDisplay(struct MainMenu* pMenu)
 {
-   TRACE("UpdateDisplay\n");
    Uint8 r = 255, g = 215, b = 139;
 #ifdef _TINSPIRE
    if (!has_colors)
@@ -241,12 +235,9 @@ void UpdateDisplay(struct MainMenu* pMenu)
 
    SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, r, g, b));
 
-   TRACE("Before DrawText\n");
    DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "nFlags", 0, 0, 0);
 
-   TRACE("Before DrawFlagsSurface\n");
    DrawFlagsSurface(pMenu, pMenu->m_pFlagsSurface);
-   TRACE("After DrawFlagsSurface\n");
 
    int nFlagPieceWidth = MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
 
@@ -273,7 +264,6 @@ void UpdateDisplay(struct MainMenu* pMenu)
    const int nDestinationLeft = 10;
    const int nDestinationWidth = SCREEN_WIDTH - nDestinationLeft;
 
-   TRACE("Before Blit\n");
    SDL_Rect src;
    src.w = (Uint16)nDestinationWidth;
    src.h = (Uint16)pMenu->m_pFlagsSurface->h;

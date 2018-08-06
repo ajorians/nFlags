@@ -10,8 +10,6 @@
 
 #define UNUSED(x) (void)(x)
 
-#define TRACE printf
-
 #undef min
 #undef max
 

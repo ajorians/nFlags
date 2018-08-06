@@ -100,9 +100,7 @@ void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth,
 
 void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, SDL_Surface* pScreen, int x, int y, int maxWidth, int maxHeight)
 {
-   TRACE("Before getting flag thumbnail\n");
    SDL_Surface* pSurface = GetFlagImage(pFlagInformation, eFlag);
-   TRACE("After getting flag image\n");
 
    int nImgWidth = pSurface->w;
    int nImgHeight = pSurface->h;
@@ -122,15 +120,12 @@ void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFla
 
    SDL_Surface* pScaledSurface = ScaleSurface(pSurface, (Uint16)nImgWidth, (Uint16)nImgHeight);
 
-   TRACE("After getting flag thumbnail\n");
-
    SDL_Rect dst;
    dst.w = (Uint16)pScaledSurface->w;
    dst.h = (Uint16)pScaledSurface->h;
    dst.x = (Sint16)(x + ((maxWidth - dst.w) / 2));
    dst.y = (Sint16)(y + ((maxHeight - dst.h) / 2));
 
-   TRACE("Before blitting scaled flag thumbnail\n");
    SDL_BlitSurface(pScaledSurface, NULL, pScreen, &dst);
 
    SDL_FreeSurface(pScaledSurface);
