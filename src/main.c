@@ -70,9 +70,12 @@ int main(int argc, char *argv[])
 #endif
 
    struct Config* pConfig = NULL;
+   printf("About to create Config\n");
    CreateConfig(&pConfig);
+   printf("Created Config\n");
    struct MainMenu* pMenu = NULL;
    CreateMainMenu(&pMenu, pConfig, pScreen);
+   printf("Created MainMenu\n");
    while(1) {
       while(MainMenuLoop(pMenu)){}
       if (MainMenuShouldQuit(pMenu) == 1)

@@ -61,6 +61,7 @@ static void jpeg_mem_src (j_decompress_ptr cinfo, void* buffer, long nbytes)
 
 SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
 {
+   TRACE("Data Size %d\n", nSize);
    int rc, j;
 
 //   SSS    EEEEEEE  TTTTTTT  U     U  PPPP
@@ -85,7 +86,10 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    int width, height;
 
    jpg_size = nSize;
+   TRACE("Before malloc\n");
    jpg_buffer = (unsigned char*) malloc(jpg_size + 100);
+
+   TRACE("Before memcpy\n");
 
    memcpy(jpg_buffer, pData, jpg_size);
 
@@ -106,6 +110,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    cinfo.err = jpeg_std_error(&jerr);
    jpeg_create_decompress(&cinfo);
 
+   TRACE("Created jpeg decompress\n");
+
 
    // Configure this decompressor to read its data from a memory
    // buffer starting at unsigned char *jpg_buffer, which is jpg_size
@@ -118,6 +124,7 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    // managers as examples to work from.
    jpeg_mem_src(&cinfo, jpg_buffer, jpg_size);
 
+   TRACE("Before read header\n");
 
    // Have the decompressor scan the jpeg header. This won't populate
    // the cinfo struct output fields, but will indicate if the
@@ -126,6 +133,7 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
 
    if (rc != 1) {
       //Should not happen in this program
+      TRACE("Unexpected return\n");
    }
 
    // By calling jpeg_start_decompress, you populate cinfo
@@ -135,6 +143,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
 
    width = cinfo.output_width;
    height = cinfo.output_height;
+
+   TRACE("Width and Height: %dx%d\n", width, height);
 
    SDL_Surface *pSurface = SDL_CreateRGBSurface(0, width, height, SCREEN_BIT_DEPTH, 0, 0, 0, 0);
    // The row_stride is the total number of bytes it takes to store an
@@ -150,6 +160,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    cinfo.out_color_space = JCS_RGB;
    cinfo.out_color_components = 3;
    cinfo.output_components = 3;
+
+   TRACE("Reading scanlines\n");
 
    // jpeg_read_scanlines takes an array of buffers, one for each scanline.
    // Even if you give it a complete set of buffers for the whole image,
@@ -176,6 +188,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
          put_pixel16(pSurface, j, cinfo.output_scanline- 1, color);
       }
    }
+
+   TRACE("Finishing decompress\n");
 
    // Once done reading *all* scanlines, release all internal buffers,
    // etc by calling jpeg_finish_decompress. This lets you go back and
@@ -204,6 +218,8 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
 // D    DD  O     O  N   N N  E
 // D  DDD    O   O   N    NN  E
 // DDDD       OOO    N     N  EEEEEEE
+
+   TRACE("Loaded image\n");
 
    return pSurface;
 

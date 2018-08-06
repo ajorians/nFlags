@@ -51,7 +51,7 @@ void CommaSeparate(char* pstrBuffer)
    }
 }
 
-void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput)
+void StringCopy(char* pstrOutput, int bufferSize, const char* pstrInput)
 {
 #ifdef _TINSPIRE
    strcpy(pstrOutput, pstrInput);
@@ -62,7 +62,7 @@ void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput)
 #endif
 }
 
-void StringAppend(char* pstrBuffer, int nSize, char* pstrAddition)
+void StringAppend(char* pstrBuffer, int nSize, const char* pstrAddition)
 {
 #ifdef _TINSPIRE
    strcat(pstrBuffer, pstrAddition);
