@@ -23,6 +23,9 @@
 
 #ifdef QUANT_2PASS_SUPPORTED
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 /*
  * This module implements the well-known Heckbert paradigm for color
@@ -224,6 +227,7 @@ METHODDEF(void)
 prescan_quantize (j_decompress_ptr cinfo, JSAMPARRAY input_buf,
 		  JSAMPARRAY output_buf, int num_rows)
 {
+   UNUSED(output_buf);
   my_cquantize_ptr cquantize = (my_cquantize_ptr) cinfo->cquantize;
   register JSAMPROW ptr;
   register histptr histp;
@@ -1155,6 +1159,7 @@ finish_pass1 (j_decompress_ptr cinfo)
 METHODDEF(void)
 finish_pass2 (j_decompress_ptr cinfo)
 {
+   UNUSED(cinfo);
   /* no work */
 }
 

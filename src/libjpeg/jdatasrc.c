@@ -19,6 +19,9 @@
 #include "jpeglib.h"
 #include "jerror.h"
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 /* Expanded data source object for stdio input */
 
@@ -168,6 +171,7 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 METHODDEF(void)
 term_source (j_decompress_ptr cinfo)
 {
+  UNUSED(cinfo);
   /* no work necessary here */
 }
 
