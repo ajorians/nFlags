@@ -23,6 +23,10 @@
 #undef BLOCK_SMOOTHING_SUPPORTED
 #endif
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
+
 /* Private buffer controller object */
 
 typedef struct {
@@ -227,6 +231,7 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
 METHODDEF(int)
 dummy_consume_data (j_decompress_ptr cinfo)
 {
+   UNUSED(cinfo);
   return JPEG_SUSPENDED;	/* Always indicate nothing was done */
 }
 

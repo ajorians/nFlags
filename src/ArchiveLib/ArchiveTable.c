@@ -160,7 +160,7 @@ int UpdateArchiveItemEntry(struct ArchiveTable* pRoot, const char* pstrName, con
 {
    DEBUG_FUNC_NAME;
 
-   struct ArchiveEntry* pEntry = UpdateArchiveItemEntryItem(&pRoot->m_pEntries, pstrName, pstrValue, pnIndex);
+   struct ArchiveEntry* pEntry = UpdateArchiveEntryItem(&pRoot->m_pEntries, pstrName, pstrValue, pnIndex);
 
    if( pEntry == NULL ) {
       return ARCHIVE_OUT_OF_MEMORY;

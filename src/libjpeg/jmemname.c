@@ -39,6 +39,10 @@ extern void free JPP((void *ptr));
 #endif
 #endif
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
+
 
 /*
  * Selection of a file name for a temporary file.
@@ -141,12 +145,15 @@ select_file_name (char * fname)
 GLOBAL(void *)
 jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
 {
+  UNUSED(cinfo);
   return (void *) malloc(sizeofobject);
 }
 
 GLOBAL(void)
 jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 {
+  UNUSED(cinfo);
+  UNUSED(sizeofobject);
   free(object);
 }
 
@@ -161,12 +168,15 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
 {
+  UNUSED(cinfo);
   return (void FAR *) malloc(sizeofobject);
 }
 
 GLOBAL(void)
 jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 {
+   UNUSED(cinfo);
+   UNUSED(sizeofobject);
   free(object);
 }
 
@@ -187,6 +197,8 @@ GLOBAL(long)
 jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
 		    long max_bytes_needed, long already_allocated)
 {
+   UNUSED(min_bytes_needed);
+   UNUSED(max_bytes_needed);
   return cinfo->mem->max_memory_to_use - already_allocated;
 }
 
@@ -246,6 +258,7 @@ GLOBAL(void)
 jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 			 long total_bytes_needed)
 {
+  UNUSED(total_bytes_needed);
   select_file_name(info->temp_name);
   if ((info->temp_file = fopen(info->temp_name, RW_BINARY)) == NULL)
     ERREXITS(cinfo, JERR_TFILE_CREATE, info->temp_name);
@@ -264,6 +277,7 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
+  UNUSED(cinfo);
   next_file_num = 0;		/* initialize temp file name generator */
   return DEFAULT_MAX_MEM;	/* default for max_memory_to_use */
 }
@@ -271,5 +285,6 @@ jpeg_mem_init (j_common_ptr cinfo)
 GLOBAL(void)
 jpeg_mem_term (j_common_ptr cinfo)
 {
+  UNUSED(cinfo);
   /* no work */
 }

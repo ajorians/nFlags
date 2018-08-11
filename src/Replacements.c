@@ -31,7 +31,7 @@ void IntToA(char* pstrBuffer, int bufferSize, int n)
 
 void CommaSeparate(char* pstrBuffer)
 {
-   int nLen = strlen(pstrBuffer);
+   int nLen = (int)strlen(pstrBuffer);
    int nCommasToAdd = (nLen - 1) / 3;
    if (nCommasToAdd <= 0)
       return;
@@ -51,7 +51,7 @@ void CommaSeparate(char* pstrBuffer)
    }
 }
 
-void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput)
+void StringCopy(char* pstrOutput, int bufferSize, const char* pstrInput)
 {
 #ifdef _TINSPIRE
    strcpy(pstrOutput, pstrInput);
@@ -62,7 +62,7 @@ void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput)
 #endif
 }
 
-void StringAppend(char* pstrBuffer, int nSize, char* pstrAddition)
+void StringAppend(char* pstrBuffer, int nSize, const char* pstrAddition)
 {
 #ifdef _TINSPIRE
    strcat(pstrBuffer, pstrAddition);
