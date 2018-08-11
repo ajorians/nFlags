@@ -190,7 +190,7 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
       SDL_Rect dst;
       dst.x = (Sint16)nX;
       dst.y = (Sint16)nY + MENU_FLAG_MAX_HEIGHT;
-      dst.w = (Uint16)min(pMenu->m_pFlagsSurface->w - dst.x, MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
+      dst.w = (Uint16)(pMenu->m_pFlagsSurface->w - dst.x);
       dst.h = (Uint16)min(pMenu->m_pFlagsSurface->h - dst.y, MENU_FLAG_SPACING_VERT);
 
       SDL_FillRect(pFlagsSurface, &dst, SDL_MapRGB(pMenu->m_pFlagsSurface->format, 255, 215, 139));
@@ -248,7 +248,7 @@ void UpdateDisplay(struct MainMenu* pMenu)
 
    SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, r, g, b));
 
-   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "Flags", 0, 0, 0);
+   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "nFlags", 0, 0, 0);
 
    DrawFlagsSurface(pMenu, pMenu->m_pFlagsSurface);
 
