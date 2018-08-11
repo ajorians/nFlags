@@ -70,10 +70,9 @@ void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth,
    DrawText(pSurface, pFont, x, y, buffer, r, g, b);
 }
 
-/*SDL_Surface* GetFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, int maxWidth, int maxHeight)
+SDL_Surface* GetFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, int maxWidth, int maxHeight)
 {
    SDL_Surface* pSurface = GetFlagImage(pFlagInformation, eFlag);
-   TRACE("After getting flag image\n");
 
    int nImgWidth = pSurface->w;
    int nImgHeight = pSurface->h;
@@ -96,29 +95,11 @@ void SmartDrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, int nWidth,
    pSurface = NULL;
 
    return pScaledSurface;
-}*/
+}
 
 void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFlag, SDL_Surface* pScreen, int x, int y, int maxWidth, int maxHeight)
 {
-   SDL_Surface* pSurface = GetFlagImage(pFlagInformation, eFlag);
-
-   int nImgWidth = pSurface->w;
-   int nImgHeight = pSurface->h;
-
-   if (nImgWidth > maxWidth)
-   {
-      double d = (double)maxWidth / nImgWidth;
-      nImgWidth = (int)(nImgWidth * d);
-      nImgHeight = (int)(nImgHeight * d);
-   }
-   if (nImgHeight > maxHeight)
-   {
-      double d = (double)maxHeight / nImgHeight;
-      nImgWidth = (int)(nImgWidth * d);
-      nImgHeight = (int)(nImgHeight * d);
-   }
-
-   SDL_Surface* pScaledSurface = ScaleSurface(pSurface, (Uint16)nImgWidth, (Uint16)nImgHeight);
+   SDL_Surface* pScaledSurface = GetFlagThumbnail( pFlagInformation, eFlag, maxWidth, maxHeight);
 
    SDL_Rect dst;
    dst.w = (Uint16)pScaledSurface->w;
@@ -130,6 +111,4 @@ void DrawFlagThumbnail(struct FlagInformation* pFlagInformation, enum Flags eFla
 
    SDL_FreeSurface(pScaledSurface);
    pScaledSurface = NULL;
-   SDL_FreeSurface(pSurface);
-   pSurface = NULL;
 }

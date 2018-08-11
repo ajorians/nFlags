@@ -25,8 +25,10 @@ void GetCoordinatesForFlag(enum Flags eFlag, int nFlagsPerRow, int* pX, int* pY)
    int nColumn = nIndex % nFlagsPerRow;
    int nRow    = nIndex / nFlagsPerRow;
 
-   *pX = nColumn * (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
-   *pY = nRow * (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
+   if( pX != NULL)
+      *pX = nColumn * (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
+   if( pY != NULL)
+      *pY = nRow * (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
 }
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen)
@@ -39,13 +41,15 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
 
    pMenu->m_eChoice = ShowDetails;
    pMenu->m_eLastSelectedFlag = FLAGS_MAX;
-   pMenu->m_eSelectedFlag = pConfig->m_nLastCountry;
+   pMenu->m_eSelectedFlag = pConfig != NULL ? pConfig->m_nLastCountry : TheUnitedStates;
 
    pMenu->m_pFont = LoadFont("arial.ttf", NSDL_FONT_THIN, 255/*R*/, 0/*G*/, 0/*B*/, 16);
 
    CreateFlagInformation(&pMenu->m_pFlagInformation);
 
    int nNumFlags = GetNumberOfFlags(pMenu->m_pFlagInformation);
+
+   pMenu->m_pAlreadyLoadedImages = malloc(nNumFlags * sizeof(short));
 
    const int nNumFlagRows = (SCREEN_HEIGHT - MENU_TITLE_TOP - 15/*Height*/) / (MENU_FLAG_MAX_HEIGHT + MENU_FLAG_SPACING_VERT);
    //const int nNumFlagColumns = SCREEN_WIDTH / (MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ);
@@ -65,15 +69,18 @@ void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL
    for (int i = 0; i < nNumFlags; i++)
    {
       int x, y;
-      GetCoordinatesForFlag((enum Flags)i, pMenu->m_nItemsPerRow, &x, &y);
+      enum Flags eFlag = (enum Flags)i;
+      GetCoordinatesForFlag(eFlag, pMenu->m_nItemsPerRow, &x, &y);
 
-      DrawText(pMenu->m_pFlagsSurface, pMenu->m_pFont, x + 3, y, "Loading...", 0, 0, 0);
-      x += MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
+      int nLoadingX = x + MENU_FLAG_MAX_WIDTH/2 - 5;
+      int nLoadingY = y + MENU_FLAG_MAX_HEIGHT/2 - 14;
+
+      DrawText(pMenu->m_pFlagsSurface, pMenu->m_pFont, nLoadingX, nLoadingY, "...", 0, 0, 0);
    }
 
    for (int i = 0; i < nNumFlags; i++)
    {
-      pMenu->m_bAlreadyLoadedImages[i] = 0;
+      pMenu->m_pAlreadyLoadedImages[i] = 0;
    }
 }
 
@@ -86,7 +93,13 @@ void FreeMainMenu(struct MainMenu** ppMenu)
    SDL_FreeSurface(pMenu->m_pFlagsSurface);
    pMenu->m_pFlagsSurface = NULL;
 
-   pMenu->m_pConfig->m_nLastCountry = pMenu->m_eSelectedFlag;
+   if( pMenu->m_pConfig != NULL)
+   {
+      pMenu->m_pConfig->m_nLastCountry = pMenu->m_eSelectedFlag;
+   }
+
+   free( pMenu->m_pAlreadyLoadedImages);
+   pMenu->m_pAlreadyLoadedImages = NULL;
 
    pMenu->m_pConfig = NULL;//Does not own
    pMenu->m_pScreen = NULL;//Does not own
@@ -209,13 +222,13 @@ void DrawFlagsSurface(struct MainMenu* pMenu, SDL_Surface* pFlagsSurface)
 
             enum Flags eFlag = (enum Flags)nPotentialIndex;
 
-            if (pMenu->m_bAlreadyLoadedImages[(int)eFlag] == 0)
+            if (pMenu->m_pAlreadyLoadedImages[(int)eFlag] == 0)
             {
                int nX, nY;
                GetCoordinatesForFlag(eFlag, pMenu->m_nItemsPerRow, &nX, &nY);
 
                DrawFlagThumbnail(pMenu->m_pFlagInformation, eFlag, pFlagsSurface, nX, nY, MENU_FLAG_MAX_WIDTH, MENU_FLAG_MAX_HEIGHT);
-               pMenu->m_bAlreadyLoadedImages[(int)eFlag] = 1;
+               pMenu->m_pAlreadyLoadedImages[(int)eFlag] = 1;
                return;//Optimization so other thumbnails will say loading for now
             }
          }
@@ -235,21 +248,14 @@ void UpdateDisplay(struct MainMenu* pMenu)
 
    SDL_FillRect(pMenu->m_pScreen, NULL, SDL_MapRGB(pMenu->m_pScreen->format, r, g, b));
 
-   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "nFlags", 0, 0, 0);
+   DrawText(pMenu->m_pScreen, pMenu->m_pFont, 15, MENU_TITLE_TOP, "Flags", 0, 0, 0);
 
    DrawFlagsSurface(pMenu, pMenu->m_pFlagsSurface);
 
    int nFlagPieceWidth = MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
 
    int nCurrentX = 0;
-   for(int i=0; i<(int)pMenu->m_eSelectedFlag; i++)
-   {
-      nCurrentX += MENU_FLAG_MAX_WIDTH + MENU_FLAG_SPACING_HORIZ;
-      if (nCurrentX >= pMenu->m_pFlagsSurface->w)
-      {
-         nCurrentX = 0;
-      }
-   }
+   GetCoordinatesForFlag(pMenu->m_eSelectedFlag, pMenu->m_nItemsPerRow, &nCurrentX, NULL);
 
    //Initial scroll X if too jarring to scroll on opening
    if (pMenu->m_nScrollX == -1) {

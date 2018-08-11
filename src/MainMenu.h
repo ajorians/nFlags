@@ -29,7 +29,8 @@ struct MainMenu
    struct SDL_Surface* m_pScreen;//Does not own
    struct SDL_Surface* m_pFlagsSurface;
    struct FlagInformation* m_pFlagInformation;
-   short m_bAlreadyLoadedImages[15];
+   short* m_pAlreadyLoadedImages;
+   //short m_bAlreadyLoadedImages[200];
 };
 
 void CreateMainMenu(struct MainMenu** ppMenu, struct Config* pConfig, struct SDL_Surface* pScreen);
