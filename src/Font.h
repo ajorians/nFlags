@@ -19,7 +19,7 @@ typedef TTF_Font  Font;
 
 Font* LoadFont(char* pstrName, int nID, int r, int g, int b, int size);
 void FreeFont(Font* pFont);
-void DrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, char* pstrBuffer, int r, int g, int b);
+void DrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, const char* pstrBuffer, int r, int g, int b);
 
 #endif
 

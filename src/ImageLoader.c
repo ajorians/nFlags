@@ -106,7 +106,6 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    cinfo.err = jpeg_std_error(&jerr);
    jpeg_create_decompress(&cinfo);
 
-
    // Configure this decompressor to read its data from a memory
    // buffer starting at unsigned char *jpg_buffer, which is jpg_size
    // long, and which must contain a complete jpg already.
@@ -117,7 +116,6 @@ SDL_Surface* LoadImageFromData(unsigned char* pData, int nSize)
    // implementation of the standard jpeg_mem_src and jpeg_stdio_src
    // managers as examples to work from.
    jpeg_mem_src(&cinfo, jpg_buffer, jpg_size);
-
 
    // Have the decompressor scan the jpeg header. This won't populate
    // the cinfo struct output fields, but will indicate if the

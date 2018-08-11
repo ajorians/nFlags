@@ -20,6 +20,9 @@
 #include "jinclude.h"
 #include "jpeglib.h"
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 /* Private buffer controller object */
 
@@ -161,6 +164,8 @@ post_process_prepass (j_decompress_ptr cinfo,
 		      JSAMPARRAY output_buf, JDIMENSION *out_row_ctr,
 		      JDIMENSION out_rows_avail)
 {
+   UNUSED(output_buf);
+   UNUSED(out_rows_avail);
   my_post_ptr post = (my_post_ptr) cinfo->post;
   JDIMENSION old_next_row, num_rows;
 
@@ -205,6 +210,9 @@ post_process_2pass (j_decompress_ptr cinfo,
 		    JSAMPARRAY output_buf, JDIMENSION *out_row_ctr,
 		    JDIMENSION out_rows_avail)
 {
+   UNUSED(input_buf);
+   UNUSED(in_row_group_ctr);
+   UNUSED(in_row_groups_avail);
   my_post_ptr post = (my_post_ptr) cinfo->post;
   JDIMENSION num_rows, max_rows;
 

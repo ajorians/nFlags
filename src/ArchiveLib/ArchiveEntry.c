@@ -7,7 +7,7 @@
 #include "ArchiveEntry.h"
 #include "Defines.h"
 
-struct ArchiveEntry* UpdateArchiveItemEntryItem(struct ArchiveEntry** ppRoot, const char* pstrName, const char* pstrValue, int* pnIndex)
+struct ArchiveEntry* UpdateArchiveEntryItem(struct ArchiveEntry** ppRoot, const char* pstrName, const char* pstrValue, int* pnIndex)
 {
    DEBUG_FUNC_NAME;
 
@@ -106,7 +106,7 @@ int ReadArchiveEntries(struct ArchiveEntry** ppRoot, const char* pstr, const cha
       strncpy(strValue, pstrFoundValue+strlen("value=\""), nValueLength);
       strValue[nValueLength] = '\0';
 
-      struct ArchiveEntry* pEntry = UpdateArchiveItemEntryItem(ppRoot, strBuffer, strValue, NULL/*Index*/);
+      struct ArchiveEntry* pEntry = UpdateArchiveEntryItem(ppRoot, strBuffer, strValue, NULL/*Index*/);
       if( pEntry == NULL ) {
          break;
       }

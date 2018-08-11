@@ -6,6 +6,10 @@ Font* LoadFont(char* pstrName, int nID, int r, int g, int b, int size)
 #ifdef _TINSPIRE
    return nSDL_LoadFont(nID, r, g, b);
 #else
+   (nID);
+   (r);
+   (g);
+   (b);
    Font* pFont = TTF_OpenFont(pstrName, size);
 #ifndef _WIN32
    if( pFont == NULL )
@@ -35,24 +39,37 @@ void FreeFont(Font* pFont)
 #endif
 }
 
-void DrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, char* pstrBuffer, int r, int g, int b)
+void DrawText(SDL_Surface* pSurface, Font* pFont, int x, int y, const char* pstrBuffer, int r, int g, int b)
 {
 #ifdef _TINSPIRE
    nSDL_DrawString(pSurface, pFont, x, y, pstrBuffer);
 #else
+#ifdef _DEBUG
+   int nWordLength = strlen(pstrBuffer);
+#endif
+
    SDL_Surface *message = NULL;
    SDL_Color textColor = { r, g, b };
    message = TTF_RenderText_Solid(pFont, pstrBuffer, textColor);
    SDL_Rect rectSrc, rectDst;
-   rectSrc.w = strlen(pstrBuffer) * 12;
-   rectSrc.h = 24;
+   rectSrc.w = message->w;
+   rectSrc.h = message->h;
    rectSrc.x = 0;
    rectSrc.y = 0;
 
-   rectDst.w = 150;
-   rectDst.h = 24;
+   rectDst.w = message->w;
+   rectDst.h = message->h;
    rectDst.x = x;
    rectDst.y = y;
+
+   if( (rectDst.x + rectDst.w) >= pSurface->w )
+   {
+      rectDst.w = pSurface->w - rectDst.x;
+   }
+   if( (rectDst.y + rectDst.h) >= pSurface->h )
+   {
+      rectDst.h = pSurface->h - rectDst.y;
+   }
 
    SDL_BlitSurface(message, &rectSrc, pSurface, &rectDst);
    SDL_FreeSurface(message);

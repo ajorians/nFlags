@@ -8,6 +8,8 @@
 
 #define SCREEN_BIT_DEPTH        (16)
 
+#define UNUSED(x) (void)(x)
+
 #undef min
 #undef max
 
@@ -18,9 +20,9 @@ void IntToA(char* pstrBuffer, int bufferSize, int n);
 
 void CommaSeparate(char* pstrBuffer);
 
-void StringCopy(char* pstrOutput, int bufferSize, char* pstrInput);
+void StringCopy(char* pstrOutput, int bufferSize, const char* pstrInput);
 
-void StringAppend(char* pstrBuffer, int nSize, char* pstrAddition);
+void StringAppend(char* pstrBuffer, int nSize, const char* pstrAddition);
 
 void StringFmt(char* pstrBuffer, int nSize, char* pstrFormat, ...);
 

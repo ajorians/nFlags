@@ -5,6 +5,7 @@
 #include "SDL/SDL.h"
 #endif
 #include "FlagInformation.h"
+#include "Replacements.h"
 
 #ifndef _WIN32
 #include "Images/af.h"
@@ -441,11 +442,13 @@ void CreateFlagInformation(struct FlagInformation** ppFlagInformation)
    struct FlagInformation* pFlagInformation = (*ppFlagInformation);
 
    //Initialize stuff here
+   UNUSED(pFlagInformation);
 }
 
 void FreeFlagInformation(struct FlagInformation** ppFlagInformation)
 {
    struct FlagInformation* pFlagInformation = (*ppFlagInformation);
+   UNUSED(pFlagInformation);
 
    free(*ppFlagInformation);
    *ppFlagInformation = NULL;
@@ -453,12 +456,14 @@ void FreeFlagInformation(struct FlagInformation** ppFlagInformation)
 
 int GetNumberOfFlags(struct FlagInformation* pFlagInformation)
 {
-   return sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]);
+   UNUSED(pFlagInformation);
+   return (int)( sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]) );
 }
 
 const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrCountryName;
    return "";
@@ -466,7 +471,8 @@ const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags 
 
 const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrCapital;
    return "";
@@ -474,7 +480,8 @@ const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag
 
 int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].nSqKMs;
    return -1;
@@ -482,7 +489,8 @@ int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag
 
 int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].nPopulation;
    return -1;
@@ -491,6 +499,7 @@ int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags fl
 #ifdef _WIN32
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
+   (pFlagInformation);
    for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pstrImagePath;
@@ -499,7 +508,8 @@ const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags 
 #else
 unsigned char* GetImgDataForFlag(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].pImg;
    return NULL;
@@ -507,7 +517,8 @@ unsigned char* GetImgDataForFlag(struct FlagInformation* pFlagInformation, enum 
 
 int GetImgDataSizeForFlag(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
-   for (int i = 0; i < sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0]); i++)
+   UNUSED(pFlagInformation);
+   for (int i = 0; i < (int)(sizeof(g_FlagInfo) / sizeof(g_FlagInfo[0])); i++)
       if (g_FlagInfo[i].eFlag == flag)
          return g_FlagInfo[i].nImgSize;
    return -1;

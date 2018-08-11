@@ -105,7 +105,7 @@ int PollDetailsEvents(struct ShowFlagDetails* pDetails)
 //extern SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
 void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
 {
-   int r = 255, g = 215, b = 139;
+   Uint8 r = 255, g = 215, b = 139;
 #ifdef _TINSPIRE
    if (!has_colors)
    {
@@ -126,21 +126,21 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
    if (nImgWidth > nMaxImgWidth)
    {
       double d = (double)nMaxImgWidth / nImgWidth;
-      nImgWidth *= d;
-      nImgHeight *= d;
+      nImgWidth = ((int)(nImgWidth * d));
+      nImgHeight = ((int)(nImgHeight * d));
    }
    if (nImgHeight > nMaxImgHeight)
    {
       double d = (double)nMaxImgHeight / nImgHeight;
-      nImgWidth *= d;
-      nImgHeight *= d;
+      nImgWidth = ((int)(nImgWidth * d));
+      nImgHeight = ((int)(nImgHeight * d));
    }
 
    SDL_Rect dst;
    dst.x = 10;
    dst.y = 32;
-   dst.w = nImgWidth;
-   dst.h = nImgHeight;
+   dst.w = (Uint16)nImgWidth;
+   dst.h = (Uint16)nImgHeight;
 
    SDL_BlitSurface(pShowFlagDetails->m_pFlag, NULL, pShowFlagDetails->m_pScreen, &dst);
 

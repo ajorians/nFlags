@@ -12,6 +12,9 @@
 #include "jinclude.h"
 #include "jpeglib.h"
 
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 /* Private subobject */
 
@@ -292,6 +295,7 @@ ycck_cmyk_convert (j_decompress_ptr cinfo,
 METHODDEF(void)
 start_pass_dcolor (j_decompress_ptr cinfo)
 {
+  UNUSED(cinfo);
   /* no work needed */
 }
 

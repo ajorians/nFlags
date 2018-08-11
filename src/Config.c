@@ -7,13 +7,14 @@
 #endif
 #include "Config.h"
 #include "Replacements.h"
+#include "FlagEnum.h"
 
 void CreateConfig(struct Config** ppConfig)
 {
    *ppConfig = malloc(sizeof(struct Config));
 
    struct Config* pConfig = (*ppConfig);
-   pConfig->m_nLastCountry = 0;
+   pConfig->m_nLastCountry = (int)TheUnitedStates;
 
 #ifndef _WIN32
    pConfig->m_Archive = NULL;
@@ -42,10 +43,6 @@ void FreeConfig(struct Config** ppConfig)
    struct Config* pConfig = *ppConfig;
 #ifndef _WIN32
    ArchiveSetBatchMode(pConfig->m_Archive, ARCHIVE_ENABLE_BATCH);
-
-   /*sprintf(buffer, "%d", pConfig->m_nDrawBackground);
-   strcpy(bufferName, "DrawBkg");
-   UpdateArchiveEntry(pConfig->m_Archive, "Settings", bufferName, buffer, NULL);*/
 
    sprintf(buffer, "%d", pConfig->m_nLastCountry);
    strcpy(bufferName, "LastCountry");
