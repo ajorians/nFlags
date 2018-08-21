@@ -149,18 +149,23 @@ void UpdateDetailsDisplay(struct ShowFlagDetails* pShowFlagDetails)
    char buffer[16];
    IntToA(buffer, sizeof(buffer), GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
    CommaSeparate(buffer);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 50, "Square KM:", 0, 0, 0);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 65, buffer, 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 35, "Square KM:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 50, buffer, 0, 0, 0);
+
+   IntToA(buffer, sizeof(buffer), GetCountryAreaSqMiles(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
+   CommaSeparate(buffer);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 65, "Squares Miles:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 80, buffer, 0, 0, 0);
 
    IntToA(buffer, sizeof(buffer), GetCountryPopulation(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag));
    CommaSeparate(buffer);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 90, "Population:", 0, 0, 0);
-   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 105, buffer, 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 95, "Population:", 0, 0, 0);
+   DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, nLeftText, 110, buffer, 0, 0, 0);
 
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 15, 160, "Capital:", 0, 0, 0);
    DrawText(pShowFlagDetails->m_pScreen, pShowFlagDetails->m_pFont, 70, 160, GetCapital(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag), 0, 0, 0);
 
-#if 1
+#if 0
    int areaComparedToUS = ((int)(GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, pShowFlagDetails->m_eFlag)*100.0/GetCountryAreaSqKM(pShowFlagDetails->m_pFlagInformation, TheUnitedStates)));
    IntToA(buffer, sizeof(buffer), areaComparedToUS);
    CommaSeparate(buffer);

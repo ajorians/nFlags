@@ -131,6 +131,7 @@ int PollEvents(struct MainMenu* pMenu)
             {
                pMenu->m_eLastSelectedFlag = pMenu->m_eSelectedFlag;
                pMenu->m_eSelectedFlag--;
+	       UpdateDisplay(pMenu);
             }
             break;
 
@@ -140,6 +141,7 @@ int PollEvents(struct MainMenu* pMenu)
             {
                pMenu->m_eLastSelectedFlag = pMenu->m_eSelectedFlag;
                pMenu->m_eSelectedFlag++;
+	       UpdateDisplay(pMenu);
             }
             break;
 
@@ -149,6 +151,7 @@ int PollEvents(struct MainMenu* pMenu)
             {
                pMenu->m_eLastSelectedFlag = pMenu->m_eSelectedFlag;
                pMenu->m_eSelectedFlag-= pMenu->m_nItemsPerRow;
+	       UpdateDisplay(pMenu);
             }
             break;
 
@@ -158,6 +161,7 @@ int PollEvents(struct MainMenu* pMenu)
             {
                pMenu->m_eLastSelectedFlag = pMenu->m_eSelectedFlag;
                pMenu->m_eSelectedFlag += pMenu->m_nItemsPerRow;
+	       UpdateDisplay(pMenu);
             }
             break;
 
@@ -289,22 +293,22 @@ void UpdateDisplay(struct MainMenu* pMenu)
    {
       int nAmount = 3;
       if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (4 * nFlagPieceWidth))
-         nAmount = 18;
+         nAmount = 58;
       else if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (3 * nFlagPieceWidth))
-         nAmount = 8;
+         nAmount = 28;
       else if ((pMenu->m_nScrollX - pMenu->m_nSrcScrollX) > (2 * nFlagPieceWidth))
-         nAmount = 6;
+         nAmount = 16;
       pMenu->m_nSrcScrollX += nAmount;
    }
    if (pMenu->m_nSrcScrollX > pMenu->m_nScrollX)
    {
       int nAmount = 3;
       if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (4 * nFlagPieceWidth))
-         nAmount = 18;
+         nAmount = 58;
       else if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (3 * nFlagPieceWidth))
-         nAmount = 8;
+         nAmount = 28;
       else if ((pMenu->m_nSrcScrollX - pMenu->m_nScrollX) > (2 * nFlagPieceWidth))
-         nAmount = 6;
+         nAmount = 16;
       pMenu->m_nSrcScrollX -= nAmount;
    }
 

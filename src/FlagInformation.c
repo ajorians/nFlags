@@ -487,6 +487,13 @@ int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag
    return -1;
 }
 
+int GetCountryAreaSqMiles(struct FlagInformation* pFlagInformation, enum Flags flag)
+{
+   double dSquareKM = (double)GetCountryAreaSqKM(pFlagInformation, flag);
+   double dSquareMiles = dSquareKM * 0.386102;
+   return (int)dSquareMiles;
+}
+
 int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags flag)
 {
    UNUSED(pFlagInformation);

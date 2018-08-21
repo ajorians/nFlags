@@ -20,6 +20,7 @@ int GetNumberOfFlags(struct FlagInformation* pFlagInformation);
 const char* GetCountryName(struct FlagInformation* pFlagInformation, enum Flags flag);
 const char* GetCapital(struct FlagInformation* pFlagInformation, enum Flags flag);
 int GetCountryAreaSqKM(struct FlagInformation* pFlagInformation, enum Flags flag);
+int GetCountryAreaSqMiles(struct FlagInformation* pFlagInformation, enum Flags flag);
 int GetCountryPopulation(struct FlagInformation* pFlagInformation, enum Flags flag);
 #ifdef _WIN32
 const char* GetPathForFlag(struct FlagInformation* pFlagInformation, enum Flags flag);
